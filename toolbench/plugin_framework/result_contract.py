@@ -30,8 +30,8 @@ def _fields(fields, limit):
 def validate_result_layout(ui, capabilities):
     if 'result' not in ui:
         return
-    if ui['surface'] != 'form' or 'job' in ui or 'instrument' in ui:
-        raise ValueError('ui.result 仅用于普通 form，不能与 job 或 instrument 同时声明')
+    if ui['surface'] != 'form' or 'job' in ui:
+        raise ValueError('ui.result 仅用于普通 form，不能与 job 同时声明')
     if 'ui.result' not in capabilities:
         raise ValueError('ui.result 需要在 compatibility.capabilities 中声明 ui.result')
     layout = ui['result']

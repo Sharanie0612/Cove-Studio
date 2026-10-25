@@ -7,12 +7,13 @@ React, a frontend build or a change to Cove's registration code to add a tool.
 ## Start with a working example
 
 Download the developer starter from Cove's Developer Guide. The ZIP includes a
-standalone SDK and three projects:
+standalone SDK and four projects:
 
 | Project | Purpose | Run from that project's directory |
 | --- | --- | --- |
 | Starter root | A minimal command returning JSON | `python -S dev.py greet name=Cove` |
 | `examples/result-starter` | Summary cards and a paginated table | `python -S dev.py analyze "text=Hello Cove hello"` |
+| `examples/web-starter` | A sandboxed plugin-owned interface | `python -S dev.py snapshot` |
 | `examples/job-starter` | Progress, cancellation and safe background activity | `python -S dev.py` |
 
 The job example's dedicated command-line runner waits for a short demonstration
@@ -72,7 +73,7 @@ are executed from the manifest or result. Only explicitly selected keys appear.
 Missing values display a dash. A missing or empty table displays its empty state.
 
 Declare the `ui.result` capability explicitly. It cannot be combined with `ui.job`
-or `ui.instrument`. Older SDK v1 plugins without this layout keep their JSON view;
+or `ui.web`. Older SDK v1 plugins without this layout keep their JSON view;
 metadata-free v1 manifests remain supported.
 
 ## Background jobs
@@ -91,13 +92,14 @@ Call `job.close()` from `Tool.close()`. It waits for a bounded period and does n
 claim to forcibly stop non-cooperative callbacks. The helper does not roll back
 external effects, persist tasks, or resume work after a process exits.
 
-## Terminal, instrument and AI integration
+## Terminal, plugin-owned UI and AI integration
 
 Terminal plugins bind connect/disconnect/write/resize commands and emit text events.
-The current instrument renderer is an oscilloscope-style domain contract, not a
-universal device protocol. Keep device-specific commands and parsing in the plugin.
-For full field, profile, terminal and instrument contracts see the
-[detailed SDK reference (Chinese)](plugin-sdk.md).
+Plugins can also ship a self-contained interface through `ui.web` on Cove 0.13.0+.
+Its HTML/CSS/JavaScript runs in an opaque-origin iframe and calls declared commands
+through a controlled bridge. Writes require Cove confirmation; AI grants remain
+separate. Domain controls and polling belong to the plugin. See the
+[plugin UI contract](plugin-ui.md) and [detailed SDK reference](plugin-sdk.md).
 
 Declare AI tools with JSON Schema and an accurate `readOnly` flag. In Cove, grant
 access on Agent Tools, open MCP from Workbench, save the target client's configuration,

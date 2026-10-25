@@ -91,6 +91,7 @@ class PluginManager:
                 "windowState": {"maximized": getattr(self, '_maximized', False)}}
 
     def _stop_plugin(self, plugin_id):
+        self._views.close_plugin(plugin_id)
         if hasattr(self, '_assistant_broker'):
             self._assistant_broker.cancel_owner(plugin_id)
         with self.lock:

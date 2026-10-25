@@ -13,6 +13,12 @@ def source_files(root):
         for name in files:
             yield Path(folder)/name
 def audit(root):
+    assert not (root/'src/framework/surfaces/instrument').exists(), 'Domain UI sources belong in independent plugins'
+    assert not (root/'src/framework/surfaces/InstrumentSurface.tsx').exists(), 'Domain renderer remains in core'
+    for path in (root/'src').rglob('*'):
+        if path.suffix in {'.ts', '.tsx', '.json', '.css'}:
+            text = path.read_text(encoding='utf-8-sig')
+            assert not re.search(r'InstrumentSurface|scope-control-panel|局域网示波器|连接示波器', text), f'Domain UI in {path.relative_to(root)}'
     manifests=list((root/'plugins/projects').glob('*/manifest.json'))
     assert len(manifests)==1, 'Only one built-in service is allowed'
     assert json.loads(manifests[0].read_text(encoding='utf-8'))['id']==MCP
@@ -30,6 +36,7 @@ def audit_archive(path):
     with zipfile.ZipFile(path) as archive:
         manifests=[]
         for name in archive.namelist():
+            assert '/surfaces/instrument/' not in name and '/InstrumentSurface.' not in name, name
             if name.startswith('cove-studio/plugins/'):
                 assert name.startswith('cove-studio/plugins/projects/mcp/'), name
                 if name.endswith('/manifest.json'):

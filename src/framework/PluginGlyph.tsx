@@ -28,7 +28,6 @@ function glyphKind(tool: Manifest): Glyph {
   if (glyphs.has(tool.icon as Glyph)) return tool.icon as Glyph;
   if (tool.ui.surface === 'terminal') return 'terminal';
   if (tool.ui.surface === 'mcp') return 'plug';
-  if (tool.ui.instrument) return 'activity';
   if (tool.ui.job) return 'list-todo';
   if (tool.ui.result) return 'file-chart-column';
   return 'braces';

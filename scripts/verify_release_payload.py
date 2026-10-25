@@ -17,6 +17,8 @@ def verify(installation):
     runtime_files = verify_runtime_payload(installation, frontend_manifest['version'])
     actual_files = {path.relative_to(frontend).as_posix() for path in frontend.rglob('*')
                     if path.is_file() and path.name != 'build-manifest.json'}
+    assert not any('InstrumentSurface' in name for name in actual_files), 'Domain UI must not ship in the core'
+    assert any('WebSurface' in name for name in actual_files), 'Missing generic plugin UI container'
     assert actual_files == {item['path'] for item in frontend_manifest['files']}, 'Frontend file inventory differs'
     for item in frontend_manifest['files']:
         path = PurePosixPath(item['path'])

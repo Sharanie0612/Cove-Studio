@@ -36,7 +36,8 @@ def main():
                 starter = data / 'download/cove-plugin-starter'
                 projects = [(starter, ['greet', 'name=Cove']),
                             (starter / 'examples/result-starter', ['analyze', 'text=one two one']),
-                            (starter / 'examples/job-starter', [])]
+                            (starter / 'examples/job-starter', []),
+                            (starter / 'examples/web-starter', ['snapshot'])]
                 for project, arguments in projects:
                     result = subprocess.run([python, '-S', str(project / 'dev.py'), *arguments],
                                             cwd=data, capture_output=True, text=True, encoding='utf-8', timeout=15)
@@ -53,7 +54,7 @@ def main():
                     identity = content['manifest']['id']
                     command = content['manifest']['ui']['actions'][0]['command']
                     payload = {'greet': {'name': 'Cove'}, 'analyze': {'text': 'one two one'},
-                               'run': {'text': 'frozen', 'batches': 3}}[command]
+                               'run': {'text': 'frozen', 'batches': 3}, 'snapshot': {}}[command]
                     reply = host.invoke(identity, command, payload)
                     assert reply['ok'], reply
                     if command == 'analyze':
@@ -67,6 +68,24 @@ def main():
                             time.sleep(.05)
                         assert snapshot['state'] == 'completed', snapshot
                         assert snapshot['completed'] == 3
+                    if command == 'snapshot':
+                        opened = host.plugin_view_open(identity)
+                        assert opened['ok'], opened
+                        ticket = opened['result']['ticket']
+                        assert host.plugin_view_call(ticket, 'snapshot', {})['result']['value'] == 0
+                        from concurrent.futures import ThreadPoolExecutor
+                        with ThreadPoolExecutor() as pool:
+                            future = pool.submit(host.plugin_view_call, ticket, 'increment', {'amount': 1})
+                            deadline = time.monotonic() + 5
+                            while time.monotonic() < deadline:
+                                pending = host.assistant_state()['result']['pending']
+                                if pending:
+                                    break
+                                time.sleep(.01)
+                            assert pending
+                            host.assistant_decide(pending[0]['id'], True)
+                            assert future.result(timeout=5)['result']['value'] == 1
+                        host.plugin_view_close(ticket)
                     report['examples'].append({'id': identity, 'standaloneWithoutSitePackages': True,
                                                'packageExcludesDeveloperFiles': True, 'frozenWorkerCall': True})
                 report['passed'] = True

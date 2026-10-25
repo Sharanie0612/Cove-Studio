@@ -52,22 +52,20 @@ export interface Manifest {
     message?: string;
   };
   ui: {
-    surface: 'terminal' | 'form' | 'mcp';
+    surface: 'terminal' | 'form' | 'mcp' | 'web';
     result?: ResultLayout;
     fields: Field[];
     connection?: { connect: string; disconnect: string };
-    instrument?: Record<
-      | 'status'
-      | 'measure'
-      | 'waveform'
-      | 'screenshot'
-      | 'acquisition'
-      | 'timebase'
-      | 'channel'
-      | 'trigger'
-      | 'snapshot',
-      string
-    >;
+    web?: {
+      entry: string;
+      tools: {
+        name: string;
+        command: string;
+        description: string;
+        readOnly: boolean;
+        parameters: Record<string, unknown>;
+      }[];
+    };
     job?: { snapshot: string; cancel: string };
     profiles?: {
       list: string;
@@ -122,6 +120,9 @@ export interface Reply {
   details?: Record<string, string>;
 }
 export interface HostApi {
+  plugin_view_open(id: string): Promise<Reply>;
+  plugin_view_close(ticket: string): Promise<Reply>;
+  plugin_view_call(ticket: string, name: string, args: Record<string, unknown>): Promise<Reply>;
   set_locale(locale: string): Promise<Reply>;
   catalog(): Promise<Catalog>;
   invoke(id: string, command: string, payload: Record<string, unknown>): Promise<Reply>;

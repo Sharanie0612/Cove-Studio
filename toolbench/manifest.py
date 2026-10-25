@@ -4,8 +4,9 @@ from toolbench.contracts import validate_compatibility
 from toolbench.plugin_framework.builtins import is_host_service
 from toolbench.plugin_framework.result_contract import validate_result_layout
 from toolbench.plugin_framework.localization import validate_localization
+from toolbench.plugin_framework.web_ui import validate_web_ui
 
-SURFACES = {"terminal", "form", "mcp"}
+SURFACES = {"terminal", "form", "mcp", "web"}
 
 
 def validate_manifest(manifest: dict) -> None:
@@ -40,6 +41,7 @@ def validate_manifest(manifest: dict) -> None:
         not isinstance(c, str) or not re.fullmatch(r"[a-z][a-z0-9_]*", c) for c in commands
     ):
         raise ValueError("commands 必须包含公开命令名称")
+    validate_web_ui(manifest['ui'], commands, manifest.get('compatibility', {}).get('capabilities', []))
     fields = manifest["ui"].get("fields")
     if not isinstance(fields, list) or len(fields) > 40:
         raise ValueError("fields 必须是最多 40 项的数组")
@@ -113,13 +115,6 @@ def validate_manifest(manifest: dict) -> None:
         bindings = manifest['ui']['job']
         if manifest['ui']['surface'] != 'form' or not isinstance(bindings, dict) or set(bindings) != {'snapshot', 'cancel'} or any(v not in commands for v in bindings.values()):
             raise ValueError('job 必须在 form 中绑定 snapshot 与 cancel 命令')
-    if 'instrument' in manifest['ui']:
-        if 'job' in manifest['ui']:
-            raise ValueError('同一界面不能同时声明 job 和 instrument')
-        bindings = manifest['ui']['instrument']
-        keys = {'status', 'measure', 'waveform', 'screenshot', 'acquisition', 'timebase', 'channel', 'trigger', 'snapshot'}
-        if manifest['ui']['surface'] != 'form' or not isinstance(bindings, dict) or set(bindings) != keys or any(v not in commands for v in bindings.values()):
-            raise ValueError('instrument 必须在 form 中绑定完整的仪器命令')
     confirmations = manifest["ui"].get("confirmations", [])
     if not isinstance(confirmations, list):
         raise ValueError("confirmations 必须为数组")

@@ -71,7 +71,7 @@ plugins/projects/hello/
 | `ui.form` / `ui.terminal` | 统一表单 / 交互终端 |
 | `ui.result` | Cove 0.11.0 起的声明式结果卡片和分页表格 |
 | `ui.profiles` | 持久配置管理 |
-| `ui.job` / `ui.instrument` | 后台任务 / 仪器部件；两者不可同时绑定 |
+| `ui.job` / `ui.web` | 共享后台任务 / 插件自带隔离界面 |
 | `ai.tools` / `host.tools` | AI 工具声明 / 插件调用宿主工具的契约 |
 | `ui.mcp` | 内置 `dev.cove.mcp` 专用连接界面 |
 
@@ -106,7 +106,7 @@ plugins/projects/hello/
 
 ### 统一结果界面（Cove 0.11.0）
 
-普通 `form` 可选声明 `ui.result`。插件返回普通字典；宿主负责卡片、表格、空状态、分页和主题。此布局不能与 `job` / `instrument` 混用，并须在 `compatibility.capabilities` 中声明 `ui.result`。未声明结果布局的旧 v1 插件继续显示原始 JSON。
+普通 `form` 可选声明 `ui.result`。插件返回普通字典；宿主负责卡片、表格、空状态、分页和主题。此布局不能与 `job` / `web` 混用，并须在 `compatibility.capabilities` 中声明 `ui.result`。未声明结果布局的旧 v1 插件继续显示原始 JSON。
 
 ```json
 "result": {
@@ -151,9 +151,9 @@ class Tool(Plugin):
 
 插件构造阶段的 SDK 回复也由独立协议读取线程处理。普通执行超时仍释放对应进程以阻止迟到的连接成功；其他插件不受影响。`print()` 重定向到 stderr，避免破坏协议。诊断只提取异常类型、缺少的模块、文件名、行号和退出码，不保留原始 stderr、异常消息、源代码或参数。可从插件详情的“运行诊断”查看。
 
-## 仪器部件（Cove 0.7.3）
+## 插件自带界面（Cove 0.13.0）
 
-`form` 可声明 `ui.connection` 与 `ui.instrument`，以共享的仪器工作区显示波形、测量和 PNG 屏幕。`instrument` 必须完整绑定 `status`、`measure`、`waveform`、`screenshot`、`acquisition`、`timebase`、`channel`、`trigger`、`snapshot` 到已声明的命令。参数、结果与事件由共享部件契约定义。工作区订阅 `instrument` 事件 `{kind,result}`；结果携带采集时间，离开页面保留会话。AI 工具结果保留完整数组和图像，结果上限 16 MiB；截图 `{mime:"image/png",data_url:"data:image/png;base64,..."}` 经 MCP 作为标准 image 内容块返回。确认界面完整展示非秘密参数，秘密字段标记为 `[redacted]` 并显示遮盖数量；批准后仍使用原始值执行。当前 instrument 是示波器式领域契约，不能宣称已适用于所有仪器。
+声明 `ui.surface: "web"`、`ui.web` 和 `ui.web` capability，插件可携带自己的完整静态界面。核心只提供隔离容器、白名单命令桥接、语言与主题同步和写操作确认。详见[插件界面契约](plugin-ui.md)。领域控件、轮询和设备交互编排由独立插件实现，不进入核心渲染器。
 
 ## 终端部件
 

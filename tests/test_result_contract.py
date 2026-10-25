@@ -50,7 +50,7 @@ class ResultContractTests(unittest.TestCase):
         missing = copy.deepcopy(self.manifest)
         missing.pop('compatibility')
         invalid.append(missing)
-        for key in ('job', 'instrument'):
+        for key in ('job', 'web'):
             item = copy.deepcopy(self.manifest)
             item['ui'][key] = {}
             invalid.append(item)

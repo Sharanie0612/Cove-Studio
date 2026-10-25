@@ -1,6 +1,6 @@
 {
   "name": "cove-workbench",
-  "version": "0.12.13",
+  "version": "0.13.0",
   "private": true,
   "description": "Schema-driven Python plugin workbench",
   "scripts": {
@@ -11,7 +11,7 @@
     "desktop": ".venv\\Scripts\\python.exe -m toolbench",
     "desktop:dev": ".venv\\Scripts\\python.exe -m toolbench --dev",
     "test:plugins": ".venv\\Scripts\\python.exe -m unittest discover -s tests -v",
-    "test:frontend": "node --experimental-strip-types scripts/verify_frontend.mjs && node --experimental-strip-types scripts/verify_instrument_live.mjs && node --experimental-strip-types scripts/verify_assistant_state.mjs",
+    "test:frontend": "node --experimental-strip-types scripts/verify_frontend.mjs && node --experimental-strip-types scripts/verify_assistant_state.mjs",
     "test:ui": "playwright test",
     "format": "prettier --write src playwright.config.ts tests/ui",
     "format:check": "prettier --check src playwright.config.ts tests/ui",

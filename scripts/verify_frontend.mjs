@@ -58,7 +58,7 @@ assert.equal(filterTools(fixtures,'','',['dev.export'],false)[0].id,'dev.export'
 assert.equal(fixtures[0],terminal,'filtering must not reorder the catalog');
 assert.equal(surfaceKind(terminal),'terminal');
 assert.equal(surfaceKind(job),'job');
-assert.equal(surfaceKind({...job,ui:{surface:'form',instrument:{}}}),'instrument');
+assert.equal(surfaceKind({...job,ui:{surface:'web',web:{}}}),'web');
 assert.equal(surfaceKind({...job,ui:{surface:'form'}}),'form');
 assert.equal(toolStatus(terminal),'已连接');
 assert.equal(toolStatus({...terminal,compatibilityStatus:{supported:false,reasons:['version']}}),'需要兼容版本');

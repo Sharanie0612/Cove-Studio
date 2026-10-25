@@ -29,6 +29,9 @@ def discover_plugins(builtin_root, managed_root, drop_root, removed):
                     raise ValueError('插件 id 重复')
                 if not (folder / 'plugin.py').is_file():
                     raise ValueError('缺少 plugin.py')
+                if manifest['ui']['surface'] == 'web':
+                    from toolbench.plugin_framework.web_ui import read_web_document
+                    read_web_document(folder, manifest)
                 plugins[identity] = (folder, manifest)
             except Exception as exc:
                 issues.append({'folder': folder.name, 'error': str(exc)})

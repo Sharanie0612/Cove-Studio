@@ -1,0 +1,28 @@
+{
+  "sdkVersion": 1,
+  "id": "community.web-starter",
+  "name": "独立界面示例",
+  "description": "插件自带界面、读命令和需要 Cove 确认的写命令。",
+  "version": "0.1.0",
+  "author": "Community",
+  "category": "示例",
+  "permissions": [],
+  "compatibility": { "minHostVersion": "0.13.0", "capabilities": ["ui.web"] },
+  "commands": ["snapshot", "increment"],
+  "ui": {
+    "surface": "web",
+    "fields": [],
+    "actions": [{ "command": "snapshot", "label": "读取计数" }],
+    "web": {
+      "entry": "ui/index.html",
+      "tools": [
+        { "name": "snapshot", "command": "snapshot", "description": "Read this plugin's counter", "readOnly": true, "parameters": { "type": "object", "properties": {}, "additionalProperties": false } },
+        { "name": "increment", "command": "increment", "description": "Increment this plugin's counter", "readOnly": false, "parameters": { "type": "object", "properties": {"amount": {"type": "integer", "minimum": 1, "maximum": 10}}, "required": ["amount"], "additionalProperties": false } }
+      ]
+    }
+  },
+  "localization": {
+    "defaultLocale": "zh-CN",
+    "messages": { "en-US": { "独立界面示例": "Plugin UI example", "插件自带界面、读命令和需要 Cove 确认的写命令。": "A plugin-owned interface with read commands and approved writes.", "示例": "Examples", "读取计数": "Read counter" } }
+  }
+}

@@ -1,7 +1,7 @@
 import { t, getLocale } from './i18n.ts';
 import type { Manifest } from './types';
 
-export type SurfaceKind = 'terminal' | 'instrument' | 'job' | 'form';
+export type SurfaceKind = 'terminal' | 'web' | 'job' | 'form';
 const originals = new WeakMap<Manifest, Manifest>();
 export function categoryKey(tool: Manifest): string {
   return (originals.get(tool) || tool).category;
@@ -47,7 +47,7 @@ export function localizeTool(tool: Manifest): Manifest {
 }
 export function surfaceKind(tool: Manifest): SurfaceKind {
   if (tool.ui.surface === 'terminal') return 'terminal';
-  if (tool.ui.instrument) return 'instrument';
+  if (tool.ui.surface === 'web') return 'web';
   if (tool.ui.job) return 'job';
   return 'form';
 }

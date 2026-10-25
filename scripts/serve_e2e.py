@@ -60,6 +60,7 @@ def main():
         shutil.copytree(ROOT / 'docs/templates/starter', host._plugin_drop_root / 'localized-hello')
         shutil.copytree(ROOT / 'docs/examples/result-starter', host._plugin_drop_root / 'result')
         shutil.copytree(ROOT / 'docs/examples/job-starter', host._plugin_drop_root / 'sdk-job')
+        shutil.copytree(ROOT / 'docs/examples/web-starter', host._plugin_drop_root / 'web')
         # Exercise plain-text output with deliberately hostile-looking plugin data.
         result_folder = host._plugin_drop_root / 'result'
         result_manifest = json.loads((result_folder / 'manifest.json').read_text(encoding='utf-8'))

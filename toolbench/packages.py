@@ -62,6 +62,15 @@ def inspect_archive(content):
             files[relative] = item.filename
         if 'plugin.py' not in files:
             raise ValueError('插件包缺少 plugin.py')
+        if manifest['ui']['surface'] == 'web':
+            from toolbench.plugin_framework.web_ui import MAX_DOCUMENT_BYTES
+            entry = manifest['ui']['web']['entry']
+            if entry not in files:
+                raise ValueError('Plugin UI entry is missing from the package')
+            document = archive.read(files[entry])
+            if len(document) > MAX_DOCUMENT_BYTES:
+                raise ValueError('Plugin UI entry exceeds 4 MiB')
+            document.decode('utf-8-sig')
         requirements = archive.read(files['requirements.txt']).decode('utf-8-sig') if 'requirements.txt' in files else ''
         return {'manifest': manifest, 'files': files, 'requirements': requirements}
 

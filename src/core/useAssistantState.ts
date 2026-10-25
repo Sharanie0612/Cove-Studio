@@ -13,6 +13,10 @@ function observe(listener: () => void, active: boolean) {
     visibility();
     document.addEventListener('visibilitychange', visibility);
     const off = subscribe((event) => {
+      if (event.event === 'approval_pending') {
+        void store.refresh().catch(() => undefined);
+        return;
+      }
       if (!document.hidden && ['status', 'runtime_failure'].includes(event.event))
         store.invalidate();
     });

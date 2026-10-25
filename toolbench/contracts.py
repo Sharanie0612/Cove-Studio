@@ -3,7 +3,7 @@ import re
 
 SDK_VERSION = 1
 CAPABILITIES = frozenset({'ui.form', 'ui.result', 'ui.terminal', 'ui.mcp', 'ui.profiles',
-                          'ui.job', 'ui.instrument', 'ui.i18n', 'ai.tools', 'host.tools'})
+                          'ui.job', 'ui.web', 'ui.i18n', 'ai.tools', 'host.tools'})
 
 
 def version_tuple(value):
@@ -33,6 +33,10 @@ def compatibility_report(manifest, host_version=None):
     validate_compatibility(requirement)
     current = version_tuple(host_version)
     reasons = []
+    from toolbench.plugin_framework.web_ui import UI_KEYS
+    unsupported = sorted(set(manifest.get('ui', {})) - UI_KEYS)
+    if unsupported:
+        reasons.append('界面扩展已移出核心，请升级插件使用 ui.web：' + '、'.join(unsupported))
     if 'minHostVersion' in requirement and current < version_tuple(requirement['minHostVersion']):
         reasons.append(f"需要 Cove {requirement['minHostVersion']} 或更新版本")
     if 'maxHostVersion' in requirement and current > version_tuple(requirement['maxHostVersion']):

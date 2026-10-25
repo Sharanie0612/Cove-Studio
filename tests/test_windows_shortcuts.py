@@ -42,7 +42,7 @@ foreach($name in @('Owned','Other')){
                 return result.stdout
             run(script)
             changed = repair_shortcuts(app,[links])
-            self.assertEqual(changed,[str(links/'Owned.lnk')])
+            self.assertEqual([Path(item).resolve() for item in changed],[(links/'Owned.lnk').resolve()])
             actual=json.loads(run(r'''
 $shell=New-Object -ComObject WScript.Shell
 $result=@()
@@ -52,6 +52,6 @@ foreach($name in @('Owned','Other')){
 }
 ConvertTo-Json -InputObject @($result) -Compress
 '''))
-            self.assertEqual(Path(actual[0]['target']),app/'Cove.exe')
+            self.assertEqual(Path(actual[0]['target']).resolve(),(app/'Cove.exe').resolve())
             self.assertEqual(actual[0]['arguments'],'--port 18549')
-            self.assertEqual(Path(actual[1]['target']),root/'other/Cove.exe')
+            self.assertEqual(Path(actual[1]['target']).resolve(),(root/'other/Cove.exe').resolve())

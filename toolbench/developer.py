@@ -97,7 +97,10 @@ class DeveloperApi:
                     continue
                 prefix = 'examples/' + project.name + '/'
                 files.update({prefix + name: content for name, content in common.items()})
-                files.update({prefix + p.name: p.read_bytes() for p in project.iterdir() if p.is_file()})
+                files.update({prefix + p.relative_to(project).as_posix(): p.read_bytes()
+                              for p in project.rglob('*') if p.is_file()
+                              and not any(part.startswith('.') or part in {'__pycache__', 'node_modules'}
+                                          for part in p.relative_to(project).parts)})
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
             for name, content in files.items(): archive.writestr('cove-plugin-starter/' + name, content)

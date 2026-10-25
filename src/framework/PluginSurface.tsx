@@ -7,7 +7,7 @@ import { surfaceKind } from '../core/pluginPresentation';
 const surfaces = {
   form: lazy(() => import('./surfaces/FormSurface')),
   terminal: lazy(() => import('./surfaces/TerminalSurface')),
-  instrument: lazy(() => import('./surfaces/InstrumentSurface')),
+  web: lazy(() => import('./surfaces/WebSurface')),
   job: lazy(() => import('./surfaces/JobSurface')),
 };
 

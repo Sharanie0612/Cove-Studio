@@ -79,7 +79,8 @@
           "enum": [
             "terminal",
             "form",
-            "mcp"
+            "mcp",
+            "web"
           ]
         },
         "profiles": {
@@ -206,50 +207,6 @@
             "$ref": "#/$defs/confirmation"
           }
         },
-        "instrument": {
-          "type": "object",
-          "required": [
-            "status",
-            "measure",
-            "waveform",
-            "screenshot",
-            "acquisition",
-            "timebase",
-            "channel",
-            "trigger",
-            "snapshot"
-          ],
-          "properties": {
-            "status": {
-              "type": "string"
-            },
-            "measure": {
-              "type": "string"
-            },
-            "waveform": {
-              "type": "string"
-            },
-            "screenshot": {
-              "type": "string"
-            },
-            "acquisition": {
-              "type": "string"
-            },
-            "timebase": {
-              "type": "string"
-            },
-            "channel": {
-              "type": "string"
-            },
-            "trigger": {
-              "type": "string"
-            },
-            "snapshot": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        },
         "result": {
           "$ref": "#/$defs/resultLayout"
         },
@@ -265,6 +222,56 @@
             },
             "cancel": {
               "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "web": {
+          "type": "object",
+          "required": [
+            "entry",
+            "tools"
+          ],
+          "properties": {
+            "entry": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_./-]+\\.html$"
+            },
+            "tools": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 40,
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "command",
+                  "description",
+                  "readOnly",
+                  "parameters"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]{0,39}$"
+                  },
+                  "command": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  },
+                  "readOnly": {
+                    "type": "boolean"
+                  },
+                  "parameters": {
+                    "type": "object"
+                  }
+                },
+                "additionalProperties": false
+              }
             }
           },
           "additionalProperties": false
@@ -284,17 +291,8 @@
               }
             },
             "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "job"
-                  ]
-                },
-                {
-                  "required": [
-                    "instrument"
-                  ]
-                }
+              "required": [
+                "job"
               ]
             }
           }
@@ -312,6 +310,34 @@
               "connection",
               "terminal"
             ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "surface": {
+                "const": "web"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "web"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "job"
+                  ]
+                },
+                {
+                  "required": [
+                    "result"
+                  ]
+                }
+              ]
+            }
           }
         }
       ],

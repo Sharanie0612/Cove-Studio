@@ -34,7 +34,7 @@ Cove Studio is an open-source Windows desktop workbench for independent Python t
 | Persistent tabs keep tool workspaces mounted as you navigate. | Python commands and a manifest use shared forms, results and task controls. | Share selected tools through MCP; confirm each write in Cove. |
 
 - **One visual language.** Shared color schemes, light/dark themes and reduced-motion support.
-- **Independent extensions.** A plugin owns its commands, data and translations; the host supplies the workspace and lifecycle controls.
+- **Independent extensions.** A plugin owns its commands, data, optional sandboxed interface and translations; the host supplies the workspace and lifecycle controls.
 - **Chinese and English.** Change the interface language immediately without closing tools or connections.
 
 ## Get started
@@ -102,6 +102,7 @@ The host provides isolated worker processes, compatibility checks, task controls
 | Resource | What you will find |
 | --- | --- |
 | [Plugin SDK](docs/plugin-sdk.en.md) | Manifests, Python commands, shared surfaces and AI tools |
+| [Plugin-owned UI](docs/plugin-ui.md) | Self-contained interfaces, controlled commands and approval |
 | [Architecture](docs/architecture.md) | Core modules, transport and plugin boundaries |
 | [MCP connections](docs/harness-connections.md) | Client setup, authorization and connection diagnostics |
 | [Localization](docs/localization.md) | Interface languages, plugin catalogs and translation rules |

@@ -12,7 +12,7 @@ for (const [source, translation] of Object.entries(catalog)) {
   assert.deepEqual(parameters(translation), parameters(source), `Interpolation mismatch: ${source}`);
 }
 const han = (value) => typeof value === 'string' && /\p{Script=Han}/u.test(value);
-const staticTables = new Set(['components/PluginManager.tsx', 'core/appearance.ts', 'framework/surfaces/instrument/Measurements.tsx']);
+const staticTables = new Set(['components/PluginManager.tsx', 'core/appearance.ts']);
 let checked = 0;
 for (const relative of fs.readdirSync(new URL('src', root), { recursive: true }).filter((name) => /\.tsx?$/.test(name))) {
   const file = relative.replaceAll('\\', '/');

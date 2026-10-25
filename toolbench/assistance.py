@@ -84,18 +84,28 @@ class ToolBroker:
             self.allowed = set(plugins)
             atomic_json(self.path, {'plugins': sorted(self.allowed)})
             for pending in self.pending.values():
-                if pending['pluginId'] not in self.allowed:
+                if not pending['owner'].startswith('view:') and pending['pluginId'] not in self.allowed:
                     pending['approved'] = False
                     pending['event'].set()
 
     def call(self, owner, name, arguments):
+        def resolve():
+            declaration = next((item for item in self.definitions() if item['name'] == name), None)
+            if not declaration:
+                raise ValueError('工具未授权、已停用或不存在')
+            return declaration
+        return self._call(owner, name, arguments, resolve)
+
+    def call_view(self, ticket, name, arguments):
+        return self._call('view:' + ticket, name, arguments,
+                          lambda: self.host._views.declaration(ticket, name))
+
+    def _call(self, owner, name, arguments, resolve):
         if self.closed:
             raise ValueError('工作台正在关闭')
         with self.lock:
             revision = self.owner_revisions.get(owner, 0)
-        declaration = next((item for item in self.definitions() if item['name'] == name), None)
-        if not declaration:
-            raise ValueError('工具未授权、已停用或不存在')
+        declaration = resolve()
         with self.lock:
             target_revision = self.owner_revisions.get(declaration['pluginId'], 0)
         if not isinstance(arguments, dict) or len(json.dumps(arguments)) > 65536:
@@ -115,6 +125,7 @@ class ToolBroker:
                 if revision != self.owner_revisions.get(owner, 0):
                     raise ValueError('调用方已停止，未执行')
                 self.pending[ticket] = pending
+            self.host._emit(declaration['pluginId'], {'event': 'approval_pending', 'data': {}})
             try:
                 if not pending['event'].wait(POLICY.approval) or not pending['approved']:
                     raise ValueError('操作未获批准或确认已超时，未执行')
@@ -123,11 +134,11 @@ class ToolBroker:
                     self.pending.pop(ticket, None)
         # Permission/lifecycle can change while the confirmation is open.
         def admit():
-            available = any(item['name'] == name for item in self.definitions())
+            available = resolve() == declaration
             with self.lock:
                 cancelled = (revision != self.owner_revisions.get(owner, 0)
                              or target_revision != self.owner_revisions.get(declaration['pluginId'], 0))
-                if self.closed or cancelled or declaration['pluginId'] not in self.allowed or not available:
+                if self.closed or cancelled or not available:
                     raise ValueError('调用方、目标或工具授权已失效，未执行')
         reply = self.host._invoke(declaration['pluginId'], declaration['command'], arguments, admission=admit)
         if not reply['ok'] and not self.closed:

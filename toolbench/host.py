@@ -13,13 +13,14 @@ from toolbench.developer import DeveloperApi
 from toolbench.runtime import Worker, PluginFailure
 from toolbench.manifest import validate_manifest  # Compatibility for older host importers.
 from toolbench.assistance import AssistanceApi
+from toolbench.views import ViewApi, PluginViews
 from toolbench.contracts import require_compatible
 from toolbench.plugin_framework.lifecycle import work_state, work_summary
 
 ROOT = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent.parent))
 
 
-class Host(PluginManager, DesktopApi, DeveloperApi, AssistanceApi):
+class Host(PluginManager, DesktopApi, DeveloperApi, AssistanceApi, ViewApi):
     def __init__(self, plugins_dir: Path | None = None, data_dir: Path | None = None):
         default_data = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "Cove" if getattr(sys, "frozen", False) else ROOT / ".local"
         self.data_dir = data_dir or Path(os.environ.get("TOOLBENCH_DATA_DIR", str(default_data)))
@@ -31,6 +32,7 @@ class Host(PluginManager, DesktopApi, DeveloperApi, AssistanceApi):
         self.lock = threading.RLock()
         self._starting = set()
         self._closing = False
+        self._views = PluginViews(self)
         self._setup_management(plugins_dir)
         self._setup_assistance()
 
@@ -118,6 +120,8 @@ class Host(PluginManager, DesktopApi, DeveloperApi, AssistanceApi):
     def close(self):
         with self.lock:
             self._closing = True
+        for ticket in list(self._views.sessions):
+            self._views.close(ticket)
         self._assistant_broker.close()
         if getattr(self, '_assistant_gateway', None):
             self._assistant_gateway.close()
