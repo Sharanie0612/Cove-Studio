@@ -1,0 +1,41 @@
+{
+  "sdkVersion": 1,
+  "id": "dev.cove.mcp",
+  "name": "MCP 连接",
+  "subtitle": "连接你的 AI 工作流",
+  "description": "连接 AI 客户端，使用已授权的 Cove 工具。可停用，不可删除。",
+  "version": "0.8.3",
+  "author": "Cove",
+  "category": "连接",
+  "icon": "plug",
+  "color": "blue",
+  "permissions": [
+    "host.tools"
+  ],
+  "commands": [
+    "status"
+  ],
+  "ui": {
+    "surface": "mcp",
+    "fields": [],
+    "actions": [
+      {
+        "command": "status",
+        "label": "打开连接中心",
+        "variant": "primary"
+      }
+    ]
+  },
+  "localization": {
+    "defaultLocale": "zh-CN",
+    "messages": {
+      "en-US": {
+        "MCP 连接": "MCP Connections",
+        "连接你的 AI 工作流": "Connect your AI workflow",
+        "连接 AI 客户端，使用已授权的 Cove 工具。可停用，不可删除。": "Connect AI clients to authorized Cove tools. Can be disabled, not removed.",
+        "连接": "Connections",
+        "打开连接中心": "Open connection center"
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+name: Windows checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: python -m venv .venv
+      - run: .venv\Scripts\python.exe -m pip install -r requirements-build.lock -r requirements-dev.txt
+      - run: npm ci
+      - run: .venv\Scripts\python.exe scripts/audit_core.py
+      - run: npm run format:check
+      - run: npm run test:i18n
+      - run: npm run test:contribution
+      - run: npm run test:frontend
+      - run: .venv\Scripts\python.exe -m unittest discover -s tests
+      - run: npm run build
+      - run: npx playwright install chromium
+      - run: npm run test:ui
+      - run: choco install nsis --yes --no-progress
+      - name: Build installer and verify frozen runtime
+        shell: pwsh
+        run: |
+          $env:Path += ';C:\Program Files (x86)\NSIS'
+          .venv\Scripts\python.exe scripts/build_windows.py
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          .venv\Scripts\python.exe scripts/verify_packaged.py "artifacts/desktop-$version/Cove"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .venv\Scripts\python.exe scripts/verify_mcp.py "artifacts/desktop-$version/Cove"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .venv\Scripts\python.exe scripts/verify_runtime.py "artifacts/desktop-$version/Cove"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .venv\Scripts\python.exe scripts/verify_sdk_examples.py "artifacts/desktop-$version/Cove"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          .venv\Scripts\python.exe scripts/verify_release_payload.py "artifacts/desktop-$version/Cove"
+          exit $LASTEXITCODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-checks
+          path: |
+            artifacts/playwright-report
+            artifacts/playwright-results
+            artifacts/validation/*.json
+            artifacts/Cove-*-setup.exe
+            artifacts/Cove-*-source.zip

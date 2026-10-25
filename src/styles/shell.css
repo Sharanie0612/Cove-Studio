@@ -1,0 +1,190 @@
+/* A shared motion language: short feedback, softer navigation, stable terminals. */
+/* One compositor owns the window edge. Never stack a CSS curve over Win11 DWM. */
+:root {
+  --window-radius: 0px;
+  --window-inset: 0px;
+}
+:root[data-window-frame='alpha'] {
+  --window-radius: 16px;
+  --window-inset: 8px;
+  background: transparent;
+}
+:root[data-window-frame='alpha'] body {
+  background: transparent;
+}
+:root[data-window-frame='alpha'] #root {
+  padding: var(--window-inset);
+}
+.app-shell {
+  position: relative;
+  background: var(--bg);
+}
+:root[data-window-frame='alpha'] .app-shell {
+  border-radius: var(--window-radius);
+  clip-path: inset(0 round var(--window-radius));
+}
+:root[data-window-frame='alpha'] #root::before {
+  content: '';
+  position: fixed;
+  inset: var(--window-inset);
+  border-radius: var(--window-radius);
+  box-shadow: 0 2px 4px #0003;
+  pointer-events: none;
+}
+:root[data-window-frame='alpha']::view-transition {
+  clip-path: inset(var(--window-inset) round var(--window-radius));
+}
+:root[data-window-frame='alpha'] .window-resize {
+  position: absolute;
+}
+:root[data-window-frame='alpha'] .dialog-window::backdrop {
+  inset: var(--window-inset);
+  border-radius: var(--window-radius);
+  clip-path: inset(0 round var(--window-radius));
+}
+:root[data-window-maximized='true'],
+:root[data-window-snapped='true'] {
+  --window-radius: 0px;
+  --window-inset: 0px;
+}
+:root[data-window-maximized='true'] #root::before,
+:root[data-window-snapped='true'] #root::before {
+  display: none;
+}
+.window-resize {
+  position: absolute;
+  z-index: 90;
+  touch-action: none;
+  app-region: no-drag;
+  -webkit-app-region: no-drag;
+}
+.resize-n,
+.resize-s {
+  height: 8px;
+  left: 10px;
+  right: 10px;
+  cursor: ns-resize;
+}
+.resize-n {
+  top: 0;
+}
+.resize-s {
+  bottom: 0;
+}
+.resize-w,
+.resize-e {
+  width: 8px;
+  top: 10px;
+  bottom: 10px;
+  cursor: ew-resize;
+}
+.resize-w {
+  left: 0;
+}
+.resize-e {
+  right: 0;
+}
+.resize-nw,
+.resize-ne,
+.resize-sw,
+.resize-se {
+  width: 10px;
+  height: 10px;
+}
+.resize-nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+.resize-ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+}
+.resize-sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+.resize-se {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+.window-titlebar {
+  height: 43px;
+  flex: 0 0 43px;
+  display: flex;
+  align-items: center;
+  padding-left: 21px;
+  user-select: none;
+}
+:root[data-window-drag='native'] .window-titlebar {
+  app-region: drag;
+  -webkit-app-region: drag;
+}
+.window-titlebar button,
+.window-titlebar input,
+.window-titlebar select {
+  app-region: no-drag;
+  -webkit-app-region: no-drag;
+}
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.wordmark b {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+}
+.cove-mark {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  color: var(--blue);
+  background: var(--blue-soft);
+  border-radius: 9px;
+}
+.cove-mark svg {
+  width: 26px;
+  height: 26px;
+  stroke-width: 4.7;
+}
+.window-drag {
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.window-drag span {
+  font-size: 10px;
+  color: var(--text-3);
+  pointer-events: none;
+  padding-right: 10px;
+}
+.window-controls {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 2px;
+  padding: 0 7px;
+}
+.window-controls button {
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+  width: 38px;
+  height: 29px;
+  border-radius: 8px;
+}
+.window-controls button:hover:not(:disabled) {
+  background: var(--fill);
+}
+.window-controls .window-close:hover:not(:disabled) {
+  background: #e96870;
+  color: white;
+}

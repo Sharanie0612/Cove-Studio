@@ -1,0 +1,5 @@
+-r requirements.txt
+jsonschema>=4.23,<5
+pyinstaller>=6.22,<7
+
+mcp>=1,<2

@@ -1,0 +1,12 @@
+{
+  "description": "Unmodified vendor marks, downloaded from vendor official websites for client identification. Trademarks remain with their owners.",
+  "sources": {
+    "claude-code.png": "https://assets.claude.com/95a868946ac8a31e5ff832e2899f294aa368b836.png?w=128&h=128",
+    "cursor.svg": "https://cursor.com/marketing-static/favicon-light.svg",
+    "deepseek-harness.svg": "https://fe-static.deepseek.com/chat/favicon.svg",
+    "zcode.png": "https://zcode.z.ai/favicon-192x192.png?v=20260707-transparent",
+    "workbuddy.svg": "https://assets.workbuddy.cn/web/workbuddy/7e170c91f6fb3aa5720dd4381254492d08bf980c/assets/logo.svg",
+    "trae.png": "https://lf-cdn.trae.com.cn/obj/trae-com-cn/trae_website_prod_cn/favicon.png",
+    "codex.svg": "https://developers.openai.com/codex/ (official OpenAI provider mark in page header)"
+  }
+}

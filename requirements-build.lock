@@ -1,0 +1,26 @@
+# Windows release environment. Application APIs remain declared in requirements.txt.
+PyYAML==6.0.3
+altgraph==0.17.5
+attrs==26.1.0
+bottle==0.13.4
+cffi==2.1.1
+clr_loader==0.3.1
+idna==3.20
+json5==0.17.3
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+packaging==26.3
+pefile==2024.8.26
+proxy_tools==0.1.0
+psutil==7.2.2
+pycparser==3.11
+pyinstaller==6.22.3
+pyinstaller-hooks-contrib==2026.8
+pythonnet==3.2.1
+pywebview==6.2.1
+pywin32-ctypes==0.2.3
+referencing==0.37.0
+rpds-py==2026.9.1
+setuptools==84.0.0
+tomlkit==0.15.2
+typing_extensions==4.16.0

@@ -1,0 +1,79 @@
+{
+  "$schema": "./sdk/plugin-manifest.schema.json",
+  "sdkVersion": 1,
+  "id": "community.hello",
+  "name": "Hello 工具",
+  "description": "一个无需编写前端代码的 Python 插件示例。",
+  "version": "0.1.0",
+  "author": "Community",
+  "category": "示例",
+  "icon": "terminal",
+  "color": "blue",
+  "permissions": [],
+  "commands": [
+    "greet"
+  ],
+  "ui": {
+    "surface": "form",
+    "fields": [
+      {
+        "id": "name",
+        "label": "姓名",
+        "type": "text",
+        "default": "开发者",
+        "required": true
+      }
+    ],
+    "actions": [
+      {
+        "command": "greet",
+        "label": "打个招呼",
+        "variant": "primary"
+      }
+    ]
+  },
+  "ai": {
+    "tools": [
+      {
+        "name": "greet",
+        "command": "greet",
+        "description": "生成一条问候语。",
+        "readOnly": true,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  "localization": {
+    "defaultLocale": "zh-CN",
+    "messages": {
+      "en-US": {
+        "Hello 工具": "Hello tool",
+        "一个无需编写前端代码的 Python 插件示例。": "A Python plugin with a host-rendered interface.",
+        "示例": "Examples",
+        "姓名": "Name",
+        "打个招呼": "Say hello",
+        "你好，{name}！": "Hello, {name}!",
+        "姓名需要 1–80 个字符": "Name must contain 1–80 characters"
+      }
+    }
+  },
+  "compatibility": {
+    "minHostVersion": "0.12.11",
+    "capabilities": [
+      "ui.i18n"
+    ]
+  }
+}

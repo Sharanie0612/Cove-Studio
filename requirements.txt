@@ -1,0 +1,7 @@
+pywebview>=6.0,<7
+psutil>=7,<8
+jsonschema>=4.23,<5
+
+tomlkit>=0.13,<1
+PyYAML>=6,<7
+json5>=0.12,<1

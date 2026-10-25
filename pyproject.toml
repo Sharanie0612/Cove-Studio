@@ -1,0 +1,11 @@
+[project]
+name = "cove-workbench"
+version = "0.12.13"
+description = "A schema-driven desktop workbench for Python tools"
+license = "MIT"
+license-files = ["LICENSE", "THIRD-PARTY-NOTICES.md"]
+requires-python = ">=3.11"
+dependencies = ["pywebview>=6.0,<7", "psutil>=7,<8", "jsonschema>=4.23,<5", "tomlkit>=0.13,<1", "PyYAML>=6,<7", "json5>=0.12,<1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

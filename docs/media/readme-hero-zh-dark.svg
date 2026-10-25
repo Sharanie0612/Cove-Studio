@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="388" viewBox="0 0 1280 388" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Cove Studio — 你的工具，一个工作台。</title>
+  <desc id="desc">独立的 Python 工具，统一的桌面体验，由你决定 AI 如何访问。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1280" y2="388" gradientUnits="userSpaceOnUse"><stop stop-color="#1B2940"/><stop offset="1" stop-color="#111A2B"/></linearGradient>
+    <linearGradient id="stroke" x1="850" y1="75" x2="1190" y2="315" gradientUnits="userSpaceOnUse"><stop stop-color="#2B3E5D"/><stop offset="1" stop-color="#9CBFFC"/></linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1" fill="#2B3E5D"/></pattern>
+  </defs>
+  <rect x="1" y="1" width="1278" height="386" rx="28" fill="url(#surface)" stroke="#2B3E5D"/>
+  <path d="M826 1H1251C1266 1 1279 14 1279 29V359C1279 374 1266 387 1251 387H826Z" fill="url(#dots)" opacity=".6"/>
+  <path d="M920 83C1130 83 1086 307 1236 307M854 286C1010 286 965 108 1171 108" stroke="url(#stroke)" stroke-width="1.4" opacity=".65"/>
+  <g transform="translate(50 46) scale(.56)">
+<rect x="2" y="2" width="124" height="124" rx="30" fill="white"/>
+<g transform="rotate(-7 64 64)"><path d="M 34 23 C 42 21 52 23 57 29 C 60 33 62 40 63 48 C 64 55 61 59 54 59 L 33 59 C 25 59 21 55 21 48 L 21 37 C 21 29 26 25 34 23 Z" fill="#141414"/>
+<path d="M 34 23 C 42 21 52 23 57 29 C 60 33 62 40 63 48 C 64 55 61 59 54 59 L 33 59 C 25 59 21 55 21 48 L 21 37 C 21 29 26 25 34 23 Z" transform="rotate(180 64 64)" fill="#141414"/>
+<path d="M 34 23 C 42 21 52 23 57 29 C 60 33 62 40 63 48 C 64 55 61 59 54 59 L 33 59 C 25 59 21 55 21 48 L 21 37 C 21 29 26 25 34 23 Z" transform="rotate(270 64 64)" fill="#141414"/>
+<g transform="rotate(90 64 64)"><path d="M 34 23 C 42 21 52 23 57 29 C 60 33 62 40 63 48 C 64 55 61 59 54 59 L 33 59 C 25 59 21 55 21 48 L 21 37 C 21 29 26 25 34 23 Z" fill="#141414"/><path d="M 35 29 C 42 27.5 49.5 29 53 33.5 C 55 36.5 56 42 57 47 C 57.5 51 56 53 52 53 L 34 53 C 29.5 53 27 50.5 27 46 L 27 38 C 27 33.5 30 30.5 35 29 Z" fill="white"/></g>
+</g></g>
+  <text x="140" y="94" fill="#EDF3FF" font-family="Inter,Segoe UI,Arial,sans-serif" font-weight="650" font-size="39" letter-spacing="-1.2">Cove Studio</text>
+  <text x="54" y="190" fill="#EDF3FF" font-family="Inter,Segoe UI,Microsoft YaHei,Arial,sans-serif" font-weight="650" font-size="43" letter-spacing="-1.3">你的工具，一个工作台。</text>
+  <text x="56" y="234" fill="#ADBDD7" font-family="Inter,Segoe UI,Microsoft YaHei,Arial,sans-serif" font-size="19">独立的 Python 工具，统一的桌面体验，由你决定 AI 如何访问。</text>
+  <g font-family="Inter,Segoe UI,Microsoft YaHei,Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="1.3" fill="#ADBDD7">
+    <text x="56" y="318">PYTHON 工具</text><circle cx="198" cy="313" r="2" fill="#9CBFFC"/>
+    <text x="218" y="318">共享工作台</text><circle cx="401" cy="313" r="2" fill="#9CBFFC"/>
+    <text x="421" y="318">MCP 接入</text>
+  </g>
+  <g transform="translate(862 76)">
+    <rect width="282" height="187" rx="18" fill="#1B2940" stroke="#2B3E5D"/>
+    <path d="M0 39H282" stroke="#2B3E5D"/>
+    <circle cx="18" cy="20" r="3" fill="#2B3E5D"/><circle cx="30" cy="20" r="3" fill="#2B3E5D"/><circle cx="42" cy="20" r="3" fill="#2B3E5D"/>
+    <rect x="19" y="60" width="48" height="108" rx="9" fill="#111A2B"/>
+    <g stroke="#9CBFFC" stroke-width="1.8"><rect x="33" y="73" width="20" height="17" rx="4"/><path d="M33 79H53M40 79V90"/><path d="M33 110H53M33 123H48M33 136H50" opacity=".65"/></g>
+    <rect x="85" y="60" width="176" height="45" rx="9" fill="#111A2B" stroke="#2B3E5D"/>
+    <path d="M99 79L105 85L99 91M112 91H120" stroke="#9CBFFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="132" y="76" width="89" height="4" rx="2" fill="#2B3E5D"/><rect x="132" y="88" width="64" height="4" rx="2" fill="#2B3E5D"/>
+    <rect x="85" y="118" width="80" height="50" rx="9" fill="#111A2B"/><rect x="180" y="118" width="81" height="50" rx="9" fill="#111A2B"/>
+    <path d="M99 153V139M108 153V134M117 153V143M126 153V131M135 153V137M144 153V145" stroke="#9CBFFC" stroke-width="3" stroke-linecap="round" opacity=".75"/>
+    <path d="M193 135H247M193 145H238M193 155H243" stroke="#2B3E5D" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(1110 239)"><rect width="98" height="90" rx="19" fill="#1B2940" stroke="#2B3E5D"/>
+    <g stroke="#9CBFFC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M36 28L23 41L36 54M62 28L75 41L62 54M55 23L43 59"/></g>
+    <text x="49" y="76" text-anchor="middle" fill="#ADBDD7" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="600" letter-spacing="1">SDK</text>
+  </g>
+</svg>

@@ -1,0 +1,155 @@
+.job-surface {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 22px;
+  color: var(--text);
+}
+.job-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.job-heading > div {
+  flex: 1;
+}
+.job-heading h2 {
+  font-size: 22px;
+  margin: 0 0 8px;
+}
+.job-heading p {
+  margin: 0;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+.job-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+.job-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.job-progress progress {
+  flex: 1;
+  accent-color: var(--blue);
+  height: 8px;
+}
+.job-progress span {
+  font-size: 12px;
+  color: var(--text-2);
+}
+.job-directory {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+.job-directory > span {
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.job-directory code {
+  flex: 1;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  user-select: text;
+}
+.job-files {
+  display: grid;
+  gap: 10px;
+}
+.job-files article {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.job-files article > svg {
+  color: var(--blue);
+  flex-shrink: 0;
+}
+.job-files article > div {
+  flex: 1;
+  min-width: 0;
+}
+.job-files b {
+  font-size: 14px;
+}
+.job-files p {
+  font-size: 11px;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+  margin: 6px 0 0;
+  user-select: text;
+}
+.job-files small {
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.job-notes {
+  border-left: 3px solid var(--blue);
+  padding: 2px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.job-notes p {
+  margin: 6px 0;
+  overflow-wrap: anywhere;
+}
+.job-instructions h3 {
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+.job-instructions ol {
+  padding-left: 22px;
+  margin: 0;
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.9;
+}
+.job-surface > .button {
+  align-self: flex-start;
+}
+.job-attribution {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+.job-attribution summary {
+  cursor: pointer;
+}
+.job-attribution a {
+  color: var(--blue);
+}
+@media (max-width: 760px) {
+  .job-surface {
+    padding: 20px;
+  }
+  .job-heading {
+    align-items: flex-start;
+  }
+  .job-directory {
+    flex-wrap: wrap;
+  }
+  .job-directory code {
+    min-width: 65%;
+  }
+}

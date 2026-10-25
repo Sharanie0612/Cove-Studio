@@ -1,0 +1,13 @@
+sdk/
+dev.py
+doctor.py
+package.py
+serve.py
+setup_dsh.py
+README-dev.md
+VIBE-PROMPTS.md
+requirements-dev.txt
+cove.dsh.yml
+exports/
+examples/
+.local/

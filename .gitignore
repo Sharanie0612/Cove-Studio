@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.venv/
+.local/
+__pycache__/
+*.pyc
+artifacts/
+.pytest_cache/
+venv/
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+*.cove-plugin
+/plugins/packages/
+
+# Disposable test directories from older test runs.
+/tmp*/
+/probe-mode700/

@@ -1,0 +1,25 @@
+[
+  {
+    "file": "OpenSSL-3.5.8-LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/openssl/openssl/openssl-3.5.8/LICENSE.txt",
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "file": "OpenSSL-4.0.3-LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/openssl/openssl/openssl-4.0.3/LICENSE.txt",
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "file": "CPython-additional-notices.rst",
+    "url": "https://raw.githubusercontent.com/python/cpython/v3.12.14/Doc/license.rst",
+    "sha256": "341832873fd316a37927e79385093fbbfd40a467428480835fe435a80cadf4e5"
+  },
+  {
+    "package": "cffi 2.1.1",
+    "url": "https://files.pythonhosted.org/packages/9e/ef/008a1939e372c06329a3fce4279c02f328488f3526744906eeec3da7ad5f/cffi-2.1.1.tar.gz",
+    "sha256": "dd31f52ea1086513bb9df30f8fcee9b8918323ae067a3d5b78bc826a000712be",
+    "files": [
+      "cffi-cffi-2.1.1__LICENSE"
+    ]
+  }
+]

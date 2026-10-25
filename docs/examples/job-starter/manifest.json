@@ -1,0 +1,22 @@
+{
+  "sdkVersion": 1,
+  "id": "community.background-job",
+  "name": "后台任务示例",
+  "description": "使用统一任务界面分批处理文本，展示进度与合作式取消。",
+  "version": "0.1.0",
+  "author": "Community",
+  "category": "示例",
+  "permissions": [],
+  "compatibility": {"minHostVersion": "0.11.0", "capabilities": ["ui.job"]},
+  "commands": ["run", "snapshot", "cancel"],
+  "ui": {
+    "surface": "form",
+    "fields": [
+      {"id": "text", "label": "待处理文本", "type": "text", "default": "Hello Cove", "required": true},
+      {"id": "batches", "label": "批次数", "type": "number", "default": 50, "min": 1, "max": 500}
+    ],
+    "actions": [{"command": "run", "label": "开始处理", "variant": "primary"}],
+    "job": {"snapshot": "snapshot", "cancel": "cancel"},
+    "empty": {"title": "分批文本处理", "description": "不需要网络或硬件，使用宿主提供的进度与停止按钮。"}
+  }
+}

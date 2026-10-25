@@ -1,0 +1,58 @@
+{
+  "fonts": [
+    {
+      "name": "inter",
+      "family": "Cove Sans Latin",
+      "version": "Version 4.001;git-66647c0bb",
+      "license": "OFL-1.1",
+      "sourceUrl": "https://raw.githubusercontent.com/google/fonts/45e3d5269e4a17d823f6d84470bc084dc5ae46f6/ofl/inter/Inter%5Bopsz,wght%5D.ttf",
+      "sourceSha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "licenseFile": "inter-OFL.txt",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/45e3d5269e4a17d823f6d84470bc084dc5ae46f6/ofl/inter/OFL.txt",
+      "unicodeCount": 2849,
+      "changes": "Subset/weight range, renamed family; original outlines and attribution retained."
+    },
+    {
+      "name": "notosanssc",
+      "family": "Cove Sans CJK",
+      "version": "Version 2.004-H2;hotconv 1.0.118;makeotfexe 2.5.65603",
+      "license": "OFL-1.1",
+      "sourceUrl": "https://raw.githubusercontent.com/google/fonts/45e3d5269e4a17d823f6d84470bc084dc5ae46f6/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "licenseFile": "notosanssc-OFL.txt",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/45e3d5269e4a17d823f6d84470bc084dc5ae46f6/ofl/notosanssc/OFL.txt",
+      "unicodeCount": 7689,
+      "changes": "Subset/weight range, renamed family; original outlines and attribution retained."
+    }
+  ],
+  "files": [
+    {
+      "path": "inter-600.ttf",
+      "sha256": "d73f061d354e3830d37cedddcef62f0ca8d789a193c3a872cbabdde78feea45c"
+    },
+    {
+      "path": "inter-OFL.txt",
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"
+    },
+    {
+      "path": "inter-ui.woff2",
+      "sha256": "6d0a5e69b7b0fc896c6edcf24b1af47cee8a8e610728dd9b908e90c8332fe54e"
+    },
+    {
+      "path": "notosanssc-400.ttf",
+      "sha256": "651e4da5f74e764ac803f65ddd7cf3c44826947e20a42be70c09b827871c1231"
+    },
+    {
+      "path": "notosanssc-600.ttf",
+      "sha256": "185bd95c5c80c747ea6367f9e38ad93e412500133f667e1e34f1179ebfe12d56"
+    },
+    {
+      "path": "notosanssc-OFL.txt",
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+    },
+    {
+      "path": "notosanssc-ui.woff2",
+      "sha256": "97d8973694b15bb18b0061b9d912ca2ce01a54c2ea0ae6573f89444144d32400"
+    }
+  ]
+}
