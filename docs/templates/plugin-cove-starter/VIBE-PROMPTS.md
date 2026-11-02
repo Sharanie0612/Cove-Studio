@@ -10,6 +10,7 @@
 请在我提供的 Cove 示例项目中开发插件。先阅读 manifest.json、plugin.py、README-dev.md 和 sdk/plugin-manifest.schema.json，再修改源码。
 需求：
 - 名称：[插件名称]
+- 源码仓库与目录：[plugin-cove-xxx，后缀使用小写字母、数字和单个短横线]
 - id：[community.my-tool，使用独立且稳定的 id]
 - 要解决的问题：[描述真实场景]
 - 输入字段：[字段名、类型、必填与默认值]

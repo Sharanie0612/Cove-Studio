@@ -11,6 +11,7 @@ Var StudioButtonBitmap
 Var StudioButtonWidth
 Var StudioButtonHeight
 Var StudioButtonColor
+Var StudioButtonTextColor
 Var StudioButtonCaption
 Var StudioProbePage
 
@@ -20,7 +21,7 @@ Function StudioGUIInit
   SendMessage $mui.Button.Cancel ${WM_SETTEXT} 0 "STR:$(^CancelBtn)"
   SendMessage $mui.Button.Back ${WM_SETTEXT} 0 "STR:$(^BackBtn)"
   SetCtlColors $HWNDPARENT "${COVE_THEME_TEXT}" "${COVE_THEME_CHROME}"
-  SetCtlColors $mui.Button.Next "FFFFFF" "${COVE_THEME_ACCENT}"
+  SetCtlColors $mui.Button.Next "${COVE_THEME_ON_ACCENT}" "${COVE_THEME_ACCENT}"
   SetCtlColors $mui.Button.Back "${COVE_THEME_TEXT}" "${COVE_THEME_SURFACE}"
   SetCtlColors $mui.Button.Cancel "${COVE_THEME_TEXT}" "${COVE_THEME_SURFACE}"
   GetDlgItem $0 $HWNDPARENT 1034
@@ -62,7 +63,9 @@ Function StudioStylePrimary
     CreateFont $StudioButtonFont "Cove Sans CJK" 10 600
   System::Call 'gdi32::SelectObject(p $4, p $StudioButtonFont)'
   System::Call 'gdi32::SetBkMode(p $4, i 1)'
-  System::Call 'gdi32::SetTextColor(p $4, i 0xffffff)'
+  System::Call 'gdi32::SetTextColor(p $4, i ${COVE_THEME_ON_ACCENT_BGR})'
+  System::Call 'gdi32::GetTextColor(p $4) i.r6'
+  StrCpy $StudioButtonTextColor $6
   System::Call 'user32::GetWindowTextW(p $mui.Button.Next, w.r9, i ${NSIS_MAX_STRLEN})'
   System::Call 'user32::DrawTextW(p $4, w r9, i -1, p $0, i 0x100025)'
   StrCpy $StudioButtonWidth $1
@@ -115,6 +118,7 @@ Function StudioUIProbe
   WriteINIStr "$1" "UI" "Width" "$StudioButtonWidth"
   WriteINIStr "$1" "UI" "Height" "$StudioButtonHeight"
   WriteINIStr "$1" "UI" "Color" "$StudioButtonColor"
+  WriteINIStr "$1" "UI" "TextColor" "$StudioButtonTextColor"
   WriteINIStr "$1" "UI" "Caption" "$StudioButtonCaption"
   WriteINIStr "$1" "UI" "Bitmap" "$StudioButtonBitmap"
   WriteINIStr "$1" "UI" "Font" "$StudioButtonFont"
@@ -156,7 +160,7 @@ FunctionEnd
     CreateFont $StudioTitleFont "Cove Sans Latin" 20 600
   SendMessage $0 ${WM_SETFONT} $StudioTitleFont 0
   SetCtlColors $0 "${COVE_THEME_TEXT}" "${COVE_THEME_BACKGROUND}"
-  ${NSD_CreateLabel} 59u 47u 245u 12u "${COVE_VERSION} Preview"
+  ${NSD_CreateLabel} 59u 47u 245u 12u "${COVE_VERSION}"
   Pop $0
   SetCtlColors $0 "${COVE_THEME_MUTED}" "${COVE_THEME_BACKGROUND}"
 !macroend
@@ -178,9 +182,6 @@ Function StudioWelcomeCreate
   SetCtlColors $StudioDialog "${COVE_THEME_TEXT}" "${COVE_THEME_BACKGROUND}"
   Call muiPageLoadFullWindow
   !insertmacro StudioBrand
-  ${NSD_CreateLabel} 22u 72u 290u 18u "$(CoveText17)"
-  Pop $0
-  SetCtlColors $0 "${COVE_THEME_TEXT}" "${COVE_THEME_BACKGROUND}"
   ${NSD_CreateLabel} 18u 100u 298u 83u ""
   Pop $0
   SetCtlColors $0 "${COVE_THEME_BORDER}" "${COVE_THEME_BORDER}"
@@ -195,22 +196,15 @@ Function StudioWelcomeCreate
   ${NSD_CreateBrowseButton} 256u 128u 48u 22u "$(CoveText19)"
   Pop $0
   ${NSD_OnClick} $0 StudioBrowse
-  ${NSD_CreateLabel} 30u 157u 274u 18u "$(CoveText20)"
-  Pop $0
-  SetCtlColors $0 "${COVE_THEME_MUTED}" "${COVE_THEME_SURFACE}"
   Call DetectWebView2
-  StrCmp $WebViewVersion "" studio_missing_webview
-    ${NSD_CreateLabel} 22u 195u 290u 16u "$(CoveText21)"
-    Pop $0
-    SetCtlColors $0 "${COVE_THEME_MUTED}" "${COVE_THEME_BACKGROUND}"
-    Goto studio_show_welcome
+  StrCmp $WebViewVersion "" studio_missing_webview studio_show_welcome
   studio_missing_webview:
     ${NSD_CreateLabel} 22u 195u 205u 16u "$(CoveText22)"
     Pop $0
     SetCtlColors $0 "${COVE_THEME_MUTED}" "${COVE_THEME_BACKGROUND}"
     ${NSD_CreateLink} 238u 195u 74u 16u "$(CoveText23)"
     Pop $0
-    SetCtlColors $0 "${COVE_THEME_ACCENT}" "${COVE_THEME_BACKGROUND}"
+    SetCtlColors $0 "${COVE_THEME_LINK}" "${COVE_THEME_BACKGROUND}"
     ${NSD_OnClick} $0 StudioOpenWebView
   studio_show_welcome:
   SendMessage $mui.Button.Next ${WM_SETTEXT} 0 "STR:$(CoveText24)"
@@ -257,9 +251,6 @@ Function StudioFinishCreate
   ${NSD_CreateLabel} 22u 82u 290u 18u "$(CoveText27)"
   Pop $0
   SetCtlColors $0 "${COVE_THEME_TEXT}" "${COVE_THEME_BACKGROUND}"
-  ${NSD_CreateLabel} 22u 112u 290u 42u "$(CoveText28)"
-  Pop $0
-  SetCtlColors $0 "${COVE_THEME_MUTED}" "${COVE_THEME_BACKGROUND}"
   StrCpy $StudioLaunch ""
   StrCmp $TestMode "1" studio_finish_show
     ${NSD_CreateCheckbox} 22u 170u 290u 16u "$(CoveText29)"

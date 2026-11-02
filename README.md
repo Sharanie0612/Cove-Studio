@@ -80,6 +80,8 @@ MCP is disableable and cannot be removed. Client setup and tool authorization re
 
 ## Build your own tool
 
+Name plugin repositories and source directories `plugin-cove-<slug>`, for example `plugin-cove-text-helper`. Keep `manifest.json` IDs stable and retain the `plugin.py` entry file.
+
 Open **Developer Guide** in Cove and download the self-contained Python starter. Declare your form, commands, results and optional AI tools in a manifest. Write the behavior in Python; the host renders the interface without a frontend build or registration change.
 
 ```mermaid

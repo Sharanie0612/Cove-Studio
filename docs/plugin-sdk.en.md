@@ -6,15 +6,17 @@ React, a frontend build or a change to Cove's registration code to add a tool.
 
 ## Start with a working example
 
+Name plugin source repositories and project directories `plugin-cove-<slug>`, using lowercase letters, digits and single hyphens between words, for example `plugin-cove-text-helper`. Develop business plugins in independent projects. Keep the permanent `manifest.json` ID and the `plugin.py` SDK entry file unchanged when renaming a project. Display names come from `manifest.name`; distributable packages remain `<plugin-id>-<version>.cove-plugin`. Existing imported directory names remain compatible.
+
 Download the developer starter from Cove's Developer Guide. The ZIP includes a
 standalone SDK and four projects:
 
 | Project | Purpose | Run from that project's directory |
 | --- | --- | --- |
 | Starter root | A minimal command returning JSON | `python -S dev.py greet name=Cove` |
-| `examples/result-starter` | Summary cards and a paginated table | `python -S dev.py analyze "text=Hello Cove hello"` |
-| `examples/web-starter` | A sandboxed plugin-owned interface | `python -S dev.py snapshot` |
-| `examples/job-starter` | Progress, cancellation and safe background activity | `python -S dev.py` |
+| `examples/plugin-cove-result` | Summary cards and a paginated table | `python -S dev.py analyze "text=Hello Cove hello"` |
+| `examples/plugin-cove-web` | A sandboxed plugin-owned interface | `python -S dev.py snapshot` |
+| `examples/plugin-cove-job` | Progress, cancellation and safe background activity | `python -S dev.py` |
 
 The job example's dedicated command-line runner waits for a short demonstration
 to finish. Import it in Cove to observe progress and exercise cancellation.

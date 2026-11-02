@@ -24,7 +24,7 @@ Cove 0.13.0 adds SDK v1 capability `ui.web`. A plugin can ship its own self-cont
 }
 ```
 
-This is a fragment: retain the normal plugin identity and SDK fields. The downloadable starter includes `examples/web-starter`, which runs without frontend dependencies. A React or other frontend project can also compile into a single HTML document; the consumer does not need Node.js.
+This is a fragment: retain the normal plugin identity and SDK fields. The downloadable starter includes `examples/plugin-cove-web`, which runs without frontend dependencies. A React or other frontend project can also compile into a single HTML document; the consumer does not need Node.js.
 
 ## JavaScript API
 

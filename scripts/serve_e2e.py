@@ -57,10 +57,10 @@ def main():
         (broken / 'manifest.json').write_text(json.dumps({**manifest, 'id': 'test.broken', 'name': '启动失败测试'}), encoding='utf-8')
         (broken / 'plugin.py').write_text('import missing_e2e_dependency\n', encoding='utf-8')
         write_approval_fixture(host._plugin_drop_root / 'approval')
-        shutil.copytree(ROOT / 'docs/templates/starter', host._plugin_drop_root / 'localized-hello')
-        shutil.copytree(ROOT / 'docs/examples/result-starter', host._plugin_drop_root / 'result')
-        shutil.copytree(ROOT / 'docs/examples/job-starter', host._plugin_drop_root / 'sdk-job')
-        shutil.copytree(ROOT / 'docs/examples/web-starter', host._plugin_drop_root / 'web')
+        shutil.copytree(ROOT / 'docs/templates/plugin-cove-starter', host._plugin_drop_root / 'localized-hello')
+        shutil.copytree(ROOT / 'docs/examples/plugin-cove-result', host._plugin_drop_root / 'result')
+        shutil.copytree(ROOT / 'docs/examples/plugin-cove-job', host._plugin_drop_root / 'sdk-job')
+        shutil.copytree(ROOT / 'docs/examples/plugin-cove-web', host._plugin_drop_root / 'web')
         # Exercise plain-text output with deliberately hostile-looking plugin data.
         result_folder = host._plugin_drop_root / 'result'
         result_manifest = json.loads((result_folder / 'manifest.json').read_text(encoding='utf-8'))

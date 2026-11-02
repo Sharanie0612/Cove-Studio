@@ -22,6 +22,8 @@ Run `npm run dev` and `npm run desktop:dev` in separate terminals. Keep credenti
 
 ## Validation
 
+Plugin source repositories and project directories use `plugin-cove-<slug>`: lowercase letters, digits and single hyphens between words. This applies to maintained examples and the built-in service as well. Keep persistent manifest IDs and the `plugin.py` entry file stable; imported legacy folder names remain supported. See [plugin naming and SDK conventions](docs/plugin-sdk.en.md).
+
 For product changes, run the checks in [AGENTS.md](AGENTS.md), including the complete Python and UI suites. Set `COVE_BROWSER_CHANNEL=msedge` on Windows or install Playwright Chromium. Check both languages, themes, reduced motion and the minimum window for UI changes.
 
 Desktop delivery also requires a new installer, frozen runtime/MCP checks, a native-window check and a disposable baseline upgrade. See [Windows delivery](docs/windows-release.md). Preserve the user's running Cove; never force-close it for a test.

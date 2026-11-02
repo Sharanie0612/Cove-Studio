@@ -13,7 +13,7 @@ from toolbench.packages import build_package
 
 class ContractTests(unittest.TestCase):
     def setUp(self):
-        self.manifest = json.loads((ROOT / 'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+        self.manifest = json.loads((ROOT / 'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
         self.schema = Draft202012Validator(json.loads((ROOT / 'schemas/plugin-manifest.schema.json').read_text(encoding='utf-8')))
 
     def test_legacy_manifest_and_inclusive_version_bounds(self):

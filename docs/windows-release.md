@@ -57,6 +57,14 @@ The upgrade check uses disposable install and user-data folders. With `--desktop
 
 ## Installer appearance
 
+Starting with 0.13.5, the default preset is named Morning White & Gray (晨白灰), retaining its saved `cove` identifier. Main app, HTML wizard and native fallback share neutral grayscale backgrounds, controls, focus and shadows. Light primary actions use #282828 with white text; dark primary actions use #E5E5E5 with #242424 text. Semantic status colors, terminal output and third-party identities retain their meaning. Other saved presets and custom colors are preserved.
+
+Starting with 0.13.4, the shared Cove palette uses #BCDDED primary actions, near-white light surfaces and quiet blue-gray dark surfaces. Setup brand panels blend that accent into their surface rather than displaying a bright slab in dark mode. Upgrade checks launch the stable entry without a data override, migrate a disposable legacy profile and verify the original draft and installed data path. This covers the launcher self-blocking regression that explicit test data overrides previously hid.
+
+Starting with 0.13.3, setup uses traditional welcome/completion brand panels and full-width interior pages. Navigation stays in the Back/Next/Cancel footer. It removes navigation-style step rails, repeated step counts, tutorial-like notes and readiness labels. The location page retains structured installation/data paths; license consent, actual progress and completion choices remain. The main app, HTML wizard and native fallback share the Sierra blue palette and foreground contrast tokens.
+
+Starting with 0.13.1, setup uses its own wizard composition: a quiet brand/step rail, flat page content and a fixed Back/Next/Cancel footer. It shares the main app's font, Cove palette and control/frame tokens rather than its workspace or card layout. The isolated wizard follows the Windows light/dark preference, including changes while open; this does not read or modify the main app's saved appearance. The 640 × 520 minimum layout and both languages/themes are covered by browser checks.
+
 Starting with 0.12.11, interactive setup uses `src/setup/SetupApp.tsx` in an isolated temporary WebView. It imports the same local WOFF2 fonts, foundation/button styles, 8px control radii, 12px cards, appearance tokens and composited native frame as the main app. A native language dialog is not shown. Since 0.12.12, the wizard advances through language, location, license, installation and completion. Back/Next preserve selections. Progress reports engine phases and completed destination file sizes; preparation remains indeterminate and success requires the engine exit. Percentages are never advanced by a timer.
 
 `toolbench/setup_ui.py` exposes only this setup's fixed engine and controls. It does not instantiate the normal host, load plugins, use a personal Cove directory or reset preferences. The browser profile is disposable and stored outside the runtime payload. After license/close consent, it waits for the NSIS silent engine, which retains mutex, normal-shutdown, versioned files, payload verification, activation and shortcut rules. The UI cannot close during active writes. Completion is shown only after a successful engine exit. The completion page independently offers opening Cove and creating a desktop shortcut. Both are selected by default; the GUI engine runs with `/NO_DESKTOP_SHORTCUT` and creates a new shortcut only after confirmation. Existing owned shortcuts are still repaired and are not deleted when the option is unchecked. Silent setup creates its normal shortcuts unless `/NO_DESKTOP_SHORTCUT` is supplied; `/TESTMODE` and silent installs do not launch it. The mutex protects actual installation; a new app launch before the user begins setup is checked again by the engine.
@@ -75,11 +83,21 @@ The frozen frontend includes `dist/build-manifest.json` with its version and ass
 
 Starting with 0.12.10, `runtime-manifest.json` also records the full versioned payload and the stable launcher's hash. Activation verifies those bytes before atomically publishing `.cove-current`. The desktop and Start menu links target `<installation>/Cove.exe`, a small launcher that resolves the published version. Existing links in those folders and the current user's pinned-taskbar folder are repaired only when their target is a Cove executable within this installation. User arguments and unrelated shortcuts are preserved; tests use isolated shortcut folders. Direct launches of versioned desktops from 0.12.10 onward also forward to the active version.
 
+## Developer starter naming
+
+Starting with 0.13.6, maintained plugin source projects use `plugin-cove-<slug>`. The developer download is `plugin-cove-starter.zip` and extracts into `plugin-cove-starter/`; example projects are `examples/plugin-cove-result`, `examples/plugin-cove-job` and `examples/plugin-cove-web`. Scripts that referenced the earlier starter/extraction paths must use these new paths. The built-in source/runtime directories are `plugins/projects/plugin-cove-mcp` and `builtin-plugins/plugin-cove-mcp`.
+
+Plugin manifest IDs, entry filenames and distributable package filenames are unchanged. Existing imported directories remain accepted; naming is enforced for maintained repository projects, not used as a new import restriction.
+
+## Application data
+
+Starting with 0.13.2, desktop data defaults to `<installation>/data`, including installed plugins and the WebView profile. See [data locations and migration](storage.md). Include the frozen storage/migration check (`scripts/verify_storage.py`) in release validation; uninstall must preserve the installation-local data directory.
+
 ## When an update looks unchanged
 
 Setup requires every Cove desktop belonging to the selected installation to exit before any version is installed, including identical reinstalls. After consent, it sends a normal close request to visible main windows and waits. Active-work confirmation remains in Cove; cancelling it leaves setup blocked. No process is killed. A silent install returns 1618 while a desktop remains open. Other installations are unaffected.
 
-Check the version in Settings and use the updated shortcut or the fixed `<installation>/Cove.exe` entry. Saved appearance presets and custom colors survive upgrades; select **Cove** in Settings to use its current palette. Do not reset user preferences to force a visual change.
+Check the version in Settings and use the updated shortcut or the fixed `<installation>/Cove.exe` entry. Saved appearance presets and custom colors survive upgrades; select **Morning White & Gray** in Settings to use the current default palette. Do not reset user preferences to force a visual change.
 
 MCP adapters are separate processes. Installing a new host preserves existing sessions, so the host and adapters can run different versions. The connection page reports live session versions and warns about earlier versions. Reload Cove MCP in the client when ready to update that session. Adapters older than 0.12.4 must reload before the new disconnect controls work. Rewriting the configuration alone does not replace an already running adapter.
 

@@ -33,11 +33,11 @@ def main():
             try:
                 with zipfile.ZipFile(io.BytesIO(host._starter_bytes())) as archive:
                     archive.extractall(data / 'download')
-                starter = data / 'download/cove-plugin-starter'
+                starter = data / 'download/plugin-cove-starter'
                 projects = [(starter, ['greet', 'name=Cove']),
-                            (starter / 'examples/result-starter', ['analyze', 'text=one two one']),
-                            (starter / 'examples/job-starter', []),
-                            (starter / 'examples/web-starter', ['snapshot'])]
+                            (starter / 'examples/plugin-cove-result', ['analyze', 'text=one two one']),
+                            (starter / 'examples/plugin-cove-job', []),
+                            (starter / 'examples/plugin-cove-web', ['snapshot'])]
                 for project, arguments in projects:
                     result = subprocess.run([python, '-S', str(project / 'dev.py'), *arguments],
                                             cwd=data, capture_output=True, text=True, encoding='utf-8', timeout=15)

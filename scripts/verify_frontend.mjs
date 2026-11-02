@@ -42,6 +42,14 @@ assert.equal(customFromScheme('github').light.accent, '#0969da', 'custom editing
 for (const scheme of ['vscode','github','paper','cove']) for (const mode of ['light','dark']) {
   const tokens = themeTokens(normalizeAppearance({scheme}),mode);
   assert.ok(contrast(tokens.text,tokens.bg) >= 7, `${scheme} ${mode} needs readable page text`);
+  if(scheme==='cove') {
+    assert.ok(contrast(tokens.blue,tokens.bg)>=4.5, 'Neutral link/control ink must remain readable');
+    assert.ok(contrast(tokens['on-brand-surface'],tokens['brand-surface'])>=4.5, 'Installer brand panel text must remain readable');
+    for(const key of ['bg','surface','sidebar','text','text-2','border','blue','primary','on-primary','blue-soft','brand-surface']) {
+      const channels=tokens[key].slice(1).match(/../g);
+      assert.ok(channels.every(channel=>channel===channels[0]), `Morning White and Gray ${mode} ${key} must remain neutral`);
+    }
+  }
   assert.ok(contrast(tokens['on-primary'],tokens.primary) >= 4.3, `${scheme} ${mode} needs readable button labels`);
   assert.equal(tokens['terminal-bg'],tokens.bg, 'terminal and app surfaces must use the same palette');
   assert.ok(contrast(tokens['terminal-black'],tokens['terminal-bg']) >= 4.5, 'ANSI black output must stay visible in light and dark terminals');

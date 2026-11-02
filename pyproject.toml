@@ -1,6 +1,6 @@
 [project]
 name = "cove-workbench"
-version = "0.13.0"
+version = "0.13.6"
 description = "A schema-driven desktop workbench for Python tools"
 license = "MIT"
 license-files = ["LICENSE", "THIRD-PARTY-NOTICES.md"]

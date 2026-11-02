@@ -139,10 +139,25 @@ ConvertTo-Json -InputObject @($result) -Compress
         assert Path(links[3]['target'])==base/'another/Cove.exe'
         report['stableEntryAndOwnedShortcutRepair']=True
         smoke=base/'stable-launch.json'
+        # Reproduce normal first launch: the stable NSIS entry waits while its
+        # child migrates an old profile. An explicit data override hid this bug.
+        legacy=base/'launcher-profile/Cove'
+        (legacy/'webview').mkdir(parents=True)
+        (legacy/'webview/retained-draft.txt').write_text('retained launcher draft')
+        launch_environment={**os.environ,'LOCALAPPDATA':str(base/'launcher-profile'),'APPDATA':str(base/'launcher-roaming'),
+                            'USERPROFILE':str(base/'launcher-home'),'HOME':str(base/'launcher-home'),
+                            'CODEX_HOME':str(base/'launcher-home/.codex'),'DSH_HOME':str(base/'launcher-home/.dsh')}
+        launch_environment.pop('TOOLBENCH_DATA_DIR',None)
         launched=subprocess.run([str(installation/'Cove.exe'),'--smoke',str(smoke)],
-            env={**os.environ,'TOOLBENCH_DATA_DIR':str(base/'launcher-data')},timeout=30)
+            env=launch_environment,timeout=30)
         assert launched.returncode==0
-        assert json.loads(smoke.read_text('utf-8'))['catalog']['hostVersion']==version
+        launch_catalog=json.loads(smoke.read_text('utf-8'))['catalog']
+        assert launch_catalog['hostVersion']==version
+        assert Path(launch_catalog['dataPath'])==installation/'data'
+        assert launch_catalog['storage']['mode']=='installation'
+        assert (installation/'data/webview/retained-draft.txt').read_text()=='retained launcher draft'
+        assert (legacy/'webview/retained-draft.txt').read_text()=='retained launcher draft'
+        report['stableEntryFirstLaunchMigratesLegacyWithoutSelfBlocking']=True
         report['stableEntryLaunchesCandidateVersion']=True
         assert (installation/'.cove-test-language').read_text().strip()==args.language
         assert adapter.snapshot()['connected']
@@ -170,8 +185,11 @@ ConvertTo-Json -InputObject @($result) -Compress
         report['uninstallProtectsActiveWork']=True
         adapter.close();adapter=None;host.close();host=None
         retained=installation/'user-note.txt';retained.write_text('retain')
+        stored=installation/'data/retained-profile.txt';stored.parent.mkdir(exist_ok=True);stored.write_text('retained-data')
         assert subprocess.run([str(uninstall),'/S',f'_?={installation}'],capture_output=True,timeout=40).returncode==0
         assert retained.read_text()=='retain'
+        assert stored.read_text()=='retained-data'
+        report['uninstallPreservesInstallationLocalData']=True
         assert not runtime.exists()
         assert not (installation/'Cove.exe').exists()
         assert not (installation/'.cove-current').exists()

@@ -107,11 +107,15 @@ class SetupBridge:
                 arguments.append('/TESTMODE')
             # NSIS /D must be the final, unquoted parameter, including spaces.
             command = subprocess.list2cmdline(arguments) + f' /D={target}'
-            with tempfile.TemporaryDirectory(prefix='cove-setup-progress-', ignore_cleanup_errors=True) as folder:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with tempfile.TemporaryDirectory(prefix='.cove-setup-progress-', dir=target.parent, ignore_cleanup_errors=True) as folder:
+                from toolbench.plugin_framework.persistence import protect_private
+                protect_private(Path(folder))
                 progress = Path(folder)/'progress.ini'
                 progress.write_text(f'[Setup]\nOwner=cove-setup-progress-v1\nVersion={__version__}\nPhase=preparing\n', encoding='utf-16')
                 self._progress_path = progress
-                process = subprocess.Popen(command, env={**os.environ, 'COVE_SETUP_PROGRESS': str(progress)},
+                process = subprocess.Popen(command, env={**os.environ, 'COVE_SETUP_PROGRESS': str(progress),
+                                           'TEMP': folder, 'TMP': folder, 'TMPDIR': folder},
                                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
                 code = process.wait()  # Never kill an installer while it owns active writes.
                 self._progress_path = None
@@ -195,12 +199,15 @@ def main():
             values = window.evaluate_js('''(() => {
               const button=document.querySelector('.setup-footer .primary'), shell=document.querySelector('.setup-shell');
               return {version:document.querySelector('[data-version]').dataset.version,
-                language:document.documentElement.lang, page:document.querySelector('[data-page]').dataset.page,
-                buttonRadius:getComputedStyle(button).borderRadius, buttonColor:getComputedStyle(button).backgroundColor,
+                theme:document.documentElement.dataset.theme, language:document.documentElement.lang, page:document.querySelector('[data-page]').dataset.page,
+                buttonRadius:getComputedStyle(button).borderRadius, buttonColor:getComputedStyle(button).backgroundColor, buttonTextColor:getComputedStyle(button).color,
                 font:getComputedStyle(button).fontFamily, fontSize:getComputedStyle(button).fontSize,
                 fonts:Array.from(document.fonts).map(font=>({family:font.family,status:font.status})),
                 frame:document.documentElement.dataset.windowFrame, radius:getComputedStyle(shell).borderRadius,
                 width:innerWidth,height:innerHeight,overflow:document.body.scrollWidth>innerWidth,
+                contentOverflow:document.querySelector('.setup-content').scrollHeight>document.querySelector('.setup-content').clientHeight+1,
+                bannerWidth:document.querySelector('.setup-banner')?.getBoundingClientRect().width || 0,
+                auxiliaryNotes:document.querySelectorAll('.setup-steps,.setup-step-count,.setup-retention,.setup-hint').length,
                 caption:button.textContent};})()''')
             report.write_text(json.dumps(values, ensure_ascii=False, indent=2), encoding='utf-8')
         finally:

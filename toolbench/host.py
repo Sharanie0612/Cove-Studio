@@ -22,8 +22,10 @@ ROOT = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent.parent))
 
 class Host(PluginManager, DesktopApi, DeveloperApi, AssistanceApi, ViewApi):
     def __init__(self, plugins_dir: Path | None = None, data_dir: Path | None = None):
-        default_data = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "Cove" if getattr(sys, "frozen", False) else ROOT / ".local"
-        self.data_dir = data_dir or Path(os.environ.get("TOOLBENCH_DATA_DIR", str(default_data)))
+        from toolbench.storage import resolve_storage, legacy_in_use, StorageBusy
+        self.data_dir, self.storage = resolve_storage(ROOT, data_dir)
+        if self.storage.get('mode') == 'legacy-pending' and legacy_in_use(self.data_dir):
+            raise StorageBusy('Legacy application data is still in use')
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.plugins = {}
         self.issues = []

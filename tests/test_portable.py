@@ -47,7 +47,7 @@ class PortableTests(unittest.TestCase):
             with zipfile.ZipFile(io.BytesIO(host._starter_bytes())) as archive:
                 archive.extractall(self.root/'starter')
         finally:host.close()
-        project=self.root/'starter/cove-plugin-starter'
+        project=self.root/'starter/plugin-cove-starter'
         result=subprocess.run([sys.executable,'-S',str(project/'dev.py'),'greet','name=Cove'],cwd=project,capture_output=True,encoding='utf-8',timeout=15)
         self.assertEqual(result.returncode,0,result.stderr)
         self.assertEqual(json.loads(result.stdout)['message'],'你好，Cove！')

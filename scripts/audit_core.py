@@ -22,10 +22,13 @@ def audit(root):
     manifests=list((root/'plugins/projects').glob('*/manifest.json'))
     assert len(manifests)==1, 'Only one built-in service is allowed'
     assert json.loads(manifests[0].read_text(encoding='utf-8'))['id']==MCP
+    for parent in ('plugins/projects', 'docs/templates', 'docs/examples'):
+        for manifest in (root/parent).glob('*/manifest.json'):
+            assert re.fullmatch(r'plugin-cove-[a-z0-9]+(?:-[a-z0-9]+)*', manifest.parent.name), f'Plugin project must use plugin-cove-<slug>: {manifest.parent.relative_to(root)}'
     for path in source_files(root):
         relative=path.relative_to(root)
         if relative.parts[0]=='plugins':
-            assert relative.parts[:3]==('plugins','projects','mcp') or relative.parts[1]=='packages', relative
+            assert relative.parts[:3]==('plugins','projects','plugin-cove-mcp') or relative.parts[1]=='packages', relative
         if path.suffix in {'.py','.ts','.tsx','.md','.json','.toml','.yml','.txt','.nsi','.spec'}:
             content=path.read_text(encoding='utf-8-sig')
             identities=set(re.findall(r'dev[.](?:cove|toolbench)[.][a-z0-9.-]+',content))
@@ -38,7 +41,7 @@ def audit_archive(path):
         for name in archive.namelist():
             assert '/surfaces/instrument/' not in name and '/InstrumentSurface.' not in name, name
             if name.startswith('cove-studio/plugins/'):
-                assert name.startswith('cove-studio/plugins/projects/mcp/'), name
+                assert name.startswith('cove-studio/plugins/projects/plugin-cove-mcp/'), name
                 if name.endswith('/manifest.json'):
                     manifests.append(json.loads(archive.read(name)))
             assert not any(part in IGNORED for part in Path(name).parts), name

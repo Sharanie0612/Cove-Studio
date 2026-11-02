@@ -80,6 +80,8 @@ MCP 可停用、不可删除。客户端配置与工具授权分别管理。
 
 ## 开发自己的工具
 
+插件源码仓库和工程目录统一命名为 `plugin-cove-xxx`，例如 `plugin-cove-text-helper`。保持 `manifest.json` 的 ID 稳定，继续使用 `plugin.py` 作为入口文件。
+
 打开 Cove 的**开发指南**，下载可独立运行的 Python 示例。通过清单声明表单、命令、结果和可选 AI 工具，在 Python 中实现行为；界面由主程序渲染，无需构建前端或修改核心注册代码。
 
 ```mermaid

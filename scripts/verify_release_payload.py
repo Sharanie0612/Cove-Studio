@@ -46,7 +46,7 @@ def verify(installation):
         required = {'LICENSE', 'THIRD-PARTY-NOTICES.md', 'package-lock.json', 'requirements-build.lock',
                     'packaging/installer.nsi', 'packaging/studio-ui.nsh', 'scripts/collect_notices.py',
                     'assets/fonts/inventory.json', 'scripts/build_fonts.py',
-                    'docs/plugin-sdk.en.md', 'docs/examples/result-starter/plugin.py',
+                    'docs/plugin-sdk.en.md', 'docs/examples/plugin-cove-result/plugin.py',
                     'toolbench/plugin_framework/transactions.py'}
         assert all('cove-studio/' + name in names for name in required)
         manifest = json.loads(archive.read('source-manifest.json'))

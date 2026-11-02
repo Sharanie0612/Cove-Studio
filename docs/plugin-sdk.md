@@ -14,13 +14,17 @@
 
 ## 最小目录
 
+插件源码仓库和工程目录统一命名为 `plugin-cove-xxx`。后缀使用小写字母、数字和单个短横线分隔的单词，例如 `plugin-cove-text-helper`；不使用空格、下划线或大写字母。业务插件在独立工程中开发。
+
+仓库/目录名、插件身份和运行入口各自独立：`manifest.json` 的 `id` 是稳定身份，更新时保持原值；`plugin.py` 是固定 SDK 入口；界面中的名称由 `manifest.name` 决定。分发包继续使用 `<插件ID>-<版本>.cove-plugin`，历史源码目录名仍可导入。
+
 ```text
-plugins/projects/hello/
+plugin-cove-hello/
   manifest.json
   plugin.py
 ```
 
-请从应用下载完整示例。仓库的模板在 `docs/templates/starter`；仅复制这个目录时需先在宿主工程中运行。唯一内置的 MCP 工程位于 `plugins/projects/mcp`，工作台默认仅预装 MCP，并扫描安装根目录 plugins/ 中的源码子目录及旧托管目录；分发时使用 `python scripts/package_plugin.py 插件目录` 生成 `.cove-plugin` 文件，在“插件”页导入即生效。无效插件进入错误列表，其余插件继续加载，无需修改前端注册表。
+请从应用下载完整示例。仓库的模板在 `docs/templates/plugin-cove-starter`；仅复制这个目录时需先在宿主工程中运行。唯一内置的 MCP 工程位于 `plugins/projects/plugin-cove-mcp`，工作台默认仅预装 MCP，并扫描安装根目录 plugins/ 中的源码子目录及旧托管目录；分发时使用 `python scripts/package_plugin.py 插件目录` 生成 `.cove-plugin` 文件，在“插件”页导入即生效。无效插件进入错误列表，其余插件继续加载，无需修改前端注册表。
 
 ## manifest.json
 
@@ -121,13 +125,13 @@ plugins/projects/hello/
 
 Python 返回 `{"count":2,"rows":[{"name":"A","voltage":3.3}, ...]}`。键名是顶层属性名，不是路径或表达式。格式为 `text`、`number`、`json`；缺失值显示横线。最多 24 个卡片字段、12 列，每页 50 行，可翻页查看全部记录。文字按文本处理，不执行 HTML；只展示清单选定的字段。`title` 和表格的 `emptyText` 可选。
 
-可运行示例在 `docs/examples/result-starter`，下载开发包也在 `examples/result-starter` 提供独立 SDK、运行和打包脚本。开发者替换业务命令和数据键即可，无需修改宿主。
+可运行示例在 `docs/examples/plugin-cove-result`，下载开发包也在 `examples/plugin-cove-result` 提供独立 SDK、运行和打包脚本。开发者替换业务命令和数据键即可，无需修改宿主。
 
 ### 后台任务 helper（Cove 0.11.0）
 
 从 `toolbench.sdk` 导入 `BackgroundJob`，在插件构造时创建一个实例。主动作调用 `job.start(callback, total=..., message=...)` 立即返回快照；`ui.job` 继续绑定现有 `snapshot` 与 `cancel` 命令。回调用 `control.update(completed=..., message=...)` 上报进度，在工作单元之间调用 `control.check_cancelled()`，或用 `control.wait(seconds)` 可中断等待。返回可选 JSON 对象作为最终结果，状态默认为 `completed`，部分成功可指定 `partial`。总量未知时省略 `total`。
 
-helper 统一发布 `job` 事件和 `activity` 状态，管理当前 Worker 生命周期内递增的 `revision`，防止并发启动和旧进度覆盖终态。`cancel()` 只请求合作式取消；回调实际退出后才解除活动保护。`Tool.close()` 调用 `job.close()` 有界等待，不能宣称强制停止未响应的外部操作。它不保存历史、不自动回滚写入或恢复进程退出前的任务。完整无硬件示例在 `docs/examples/job-starter`，下载开发包的同名目录可直接 `python -S dev.py`。
+helper 统一发布 `job` 事件和 `activity` 状态，管理当前 Worker 生命周期内递增的 `revision`，防止并发启动和旧进度覆盖终态。`cancel()` 只请求合作式取消；回调实际退出后才解除活动保护。`Tool.close()` 调用 `job.close()` 有界等待，不能宣称强制停止未响应的外部操作。它不保存历史、不自动回滚写入或恢复进程退出前的任务。完整无硬件示例在 `docs/examples/plugin-cove-job`，下载开发包的同名目录可直接 `python -S dev.py`。
 
 ### 命令实现
 
@@ -222,8 +226,8 @@ save 接收 `profile` 对象，返回保存后的配置；remove 接收 `profile
 插件可声明自己的 `requirements.txt`。开发者或用户负责安装，宿主不自动下载或执行安装脚本。需要隔离依赖时：
 
 ```powershell
-python -m venv plugins/projects/my-tool/.venv
-plugins/projects/my-tool/.venv/Scripts/python.exe -m pip install -r plugins/projects/my-tool/requirements.txt
+python -m venv plugin-cove-my-tool/.venv
+plugin-cove-my-tool/.venv/Scripts/python.exe -m pip install -r plugin-cove-my-tool/requirements.txt
 ```
 
 该环境需要 Python 3.11+。也可在插件详情中选择已经安装好依赖的 `python.exe`，或将兼容依赖随 `vendor/` 分发。宿主通过 `PYTHONPATH` 提供 SDK，无需插件再安装工作台包。未提供独立环境时，源码版使用宿主解释器，安装版使用自带的 Cove-worker。工作进程以宿主资源目录为工作目录；插件文件请相对 `__file__` 定位，持久数据请写入 `self.context.data_dir`。

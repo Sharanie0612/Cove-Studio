@@ -32,7 +32,7 @@ if __name__ == "__main__":
         result = {"catalog": host.catalog()}
         from toolbench.host import ROOT
         from toolbench.bridge import DesktopBridge, API_METHODS
-        preview = host._prepare_export(ROOT / 'docs/templates/starter')
+        preview = host._prepare_export(ROOT / 'docs/templates/plugin-cove-starter')
         starter = host._starter_bytes()
         starter_path = Path(sys.argv[2]).with_name('packaged-plugin-starter.zip')
         starter_path.write_bytes(starter)

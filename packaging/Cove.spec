@@ -12,6 +12,7 @@ def resources(folder, destination):
             and '__pycache__' not in path.parts and path.suffix not in ('.pyc', '.tmp')]
 
 datas = [(str(root / 'assets/cove.ico'), 'assets'),
+         (str(root / 'src/locales/en-US.json'), 'locales'),
          (str(root / 'LICENSE'), '.'), (str(root / 'THIRD-PARTY-NOTICES.md'), '.')]
 # The bundled build interpreter can load trust-policy data next to ssl.py when
 # creating any SSLContext. Preserve that policy unchanged in the frozen layout.
@@ -19,7 +20,7 @@ ssl_policy = Path(ssl.__file__).with_name('codex-rejected-cas.pem')
 if ssl_policy.is_file():
     datas.append((str(ssl_policy), '.'))
 for folder, destination in [('dist', 'dist'), ('docs', 'docs'), ('schemas', 'schemas'),
-                            ('plugins/projects/mcp', 'builtin-plugins/mcp')]:
+                            ('plugins/projects/plugin-cove-mcp', 'builtin-plugins/plugin-cove-mcp')]:
     datas += resources(root / folder, destination)
 # The built-in MCP service ship in a dedicated data directory; imported plugins stay external.
 for source in sdk_files(root / 'toolbench'):

@@ -10,7 +10,7 @@ from audit_core import audit
 def main():
     audit(ROOT)
     output=ROOT/'plugins/packages';output.mkdir(parents=True,exist_ok=True)
-    package=build_package(ROOT/'plugins/projects/mcp')
+    package=build_package(ROOT/'plugins/projects/plugin-cove-mcp')
     destination=output/package_filename(package['manifest'])
     write_bytes_atomic(destination,package['content'])
     version=json.loads((ROOT/'package.json').read_text())['version']

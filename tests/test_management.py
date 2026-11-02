@@ -15,7 +15,7 @@ class ManagementTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(dir=ROOT)
         self.root = Path(self.temp.name)
         self.host = Host(plugins_dir=ROOT / "plugins/projects", data_dir=self.root / 'data')
-        self.manifest = json.loads((ROOT / 'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+        self.manifest = json.loads((ROOT / 'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
         self.plugin = self.manifest['id']
 
     def tearDown(self):
@@ -26,7 +26,7 @@ class ManagementTests(unittest.TestCase):
         path = self.root / 'test.cove-plugin'
         with zipfile.ZipFile(path, 'w') as archive:
             archive.writestr('hello/manifest.json', json.dumps(self.manifest))
-            archive.write(ROOT / 'docs/templates/starter/plugin.py', 'hello/plugin.py')
+            archive.write(ROOT / 'docs/templates/plugin-cove-starter/plugin.py', 'hello/plugin.py')
             for name, content in (extra or {}).items():
                 archive.writestr(name, content)
         return path
@@ -123,7 +123,7 @@ class ManagementTests(unittest.TestCase):
         import shutil
         drop = self.root / 'plugins'
         self.host._plugin_drop_root = drop
-        shutil.copytree(ROOT / 'docs/templates/starter', drop / 'hello')
+        shutil.copytree(ROOT / 'docs/templates/plugin-cove-starter', drop / 'hello')
         self.assertTrue(self.host.rescan_plugins()['ok'])
         self.assertIn(self.plugin, self.host.plugins)
         self.assertTrue(self.host.invoke(self.plugin, 'greet', {'name': 'Cove'})['ok'])

@@ -180,6 +180,8 @@ class ToolBroker:
 
 class AssistanceApi:
     def _setup_assistance(self):
+        from toolbench.storage import compatibility_directories
+        self._compatibility_directories = compatibility_directories(self)
         self._assistant_broker = ToolBroker(self)
         self._assistant_gateway = None
         from toolbench.connections import Connections
@@ -195,7 +197,8 @@ class AssistanceApi:
                 self._assistant_gateway.publish_tools()
                 self._assistant_gateway.close()
                 self._assistant_gateway = None
-            atomic_json(self.data_dir / 'mcp-tools.json', {'tools': []})
+            for folder in [self.data_dir, *self._compatibility_directories]:
+                atomic_json(folder / 'mcp-tools.json', {'tools': []})
         else:
             setup = self.assistant_bridge()
             if not setup['ok']:
@@ -251,6 +254,7 @@ class AssistanceApi:
             with self.lock:
                 if self._assistant_gateway is None:
                     self._assistant_gateway = Gateway(self._assistant_broker, self.data_dir,
+                                                      compatibility_dirs=self._compatibility_directories,
                                                       client_allowed=lambda client: self._client_connections.client_allowed(client))
             return {'ok': True, 'result': self._assistant_gateway.instructions()}
         except Exception as exc:

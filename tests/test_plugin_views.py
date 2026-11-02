@@ -24,7 +24,7 @@ class PluginViewTests(unittest.TestCase):
         self.patch = patch('toolbench.assistance.AssistanceApi._sync_mcp_service', lambda self: None)
         self.patch.start()
         self.host = Host(plugins_dir=self.root / 'empty', data_dir=self.root / 'data')
-        source = ROOT / 'docs/examples/web-starter'
+        source = ROOT / 'docs/examples/plugin-cove-web'
         self.package = self.root / 'example.cove-plugin'
         self.package.write_bytes(build_package(source)['content'])
         self.assertFalse(self.host.workers)
@@ -102,12 +102,12 @@ class PluginViewTests(unittest.TestCase):
 
     def test_download_includes_nested_ui_assets_and_packages_remain_independent(self):
         with zipfile.ZipFile(io.BytesIO(self.host._starter_bytes())) as archive:
-            html = archive.read('cove-plugin-starter/examples/web-starter/ui/index.html')
+            html = archive.read('plugin-cove-starter/examples/plugin-cove-web/ui/index.html')
         self.assertIn(b'window.Cove', html)
         self.assertNotIn(b'pywebview', html)
 
     def test_unsafe_entry_and_missing_resource_are_rejected_without_execution(self):
-        manifest = json.loads((ROOT / 'docs/examples/web-starter/manifest.json').read_text(encoding='utf-8'))
+        manifest = json.loads((ROOT / 'docs/examples/plugin-cove-web/manifest.json').read_text(encoding='utf-8'))
         for entry in ('../private.html', '/absolute.html', 'https://example.com/ui.html', 'ui\\index.html'):
             changed = copy.deepcopy(manifest)
             changed['ui']['web']['entry'] = entry
@@ -121,7 +121,7 @@ class PluginViewTests(unittest.TestCase):
             inspect_archive(content.getvalue())
 
     def test_retired_extension_is_diagnosable_instead_of_silent_fallback(self):
-        manifest = json.loads((ROOT / 'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+        manifest = json.loads((ROOT / 'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
         manifest['ui']['legacy-domain'] = {}
         validate_manifest(manifest)
         self.assertFalse(compatibility_report(manifest)['supported'])

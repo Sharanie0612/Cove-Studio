@@ -3,6 +3,7 @@
 ## Scope and architecture
 
 - This checkout contains the generic desktop host, SDK and disposable fixtures. MCP is the only bundled plugin. Business tools, identities, guides, packages and screenshots belong in independent projects.
+- Name maintained plugin repositories and source directories `plugin-cove-<slug>`, using lowercase letters, digits and single hyphens between words. Keep manifest IDs stable and retain the SDK entry file `plugin.py`; imported legacy directory names remain compatible.
 - Discovery and archive inspection read metadata only. Never import or execute plugin code during a scan.
 - Keep transport, lifecycle policy, SDK, plugin management, client configuration and native windows in their existing modules. Execution budgets, activity guards and diagnostics belong in `toolbench/plugin_framework`; shared surfaces and workspaces belong in `src/framework`.
 - Keep management navigation on the left and mounted workspaces in top tabs. AI authorization and MCP client configuration are separate workflows. Preserve plugin independence; do not add plugin-specific branches to shared orchestration.

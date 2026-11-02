@@ -65,7 +65,7 @@ def main():
         "import {normalizeAppearance,themeTokens} from './src/core/appearance.ts'; console.log(JSON.stringify(themeTokens(normalizeAppearance({scheme:'cove'}),'light')));"
     ], cwd=ROOT, text=True))
     theme_names = {'BACKGROUND': 'bg', 'SURFACE': 'surface', 'CHROME': 'sidebar',
-                   'TEXT': 'text', 'MUTED': 'text-2', 'BORDER': 'border', 'ACCENT': 'primary'}
+                   'TEXT': 'text', 'MUTED': 'text-2', 'BORDER': 'border', 'ACCENT': 'primary', 'ON_ACCENT': 'on-primary', 'LINK': 'blue'}
     (ROOT / 'artifacts/installer-theme.nsh').write_text('\n'.join(
         f'!define COVE_THEME_{name} "{palette[key].lstrip("#").upper()}"'
         for name, key in theme_names.items()) + '\n' + '\n'.join(

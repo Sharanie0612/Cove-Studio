@@ -31,7 +31,20 @@ def main():
     if not args.dev and not page.exists():
         sys.exit("请先运行 npm install 和 npm run build，再启动桌面版。")
     import webview
-    host = Host()
+    from toolbench.storage import StorageBusy
+    try:
+        host = Host()
+    except StorageBusy:
+        from toolbench.native_messages import t, show_notice
+        show_notice(t('旧数据目录仍在使用。请先正常退出相关 Cove 窗口和插件任务，再重新打开以迁移数据。'))
+        return
+    # Scope temporary/cache paths to this process; never change Windows settings.
+    from toolbench.plugin_framework.environment import worker_environment
+    import tempfile
+    environment = worker_environment(host.data_dir)
+    for key in ('TEMP', 'TMP', 'TMPDIR', 'XDG_CACHE_HOME', 'PIP_CACHE_DIR', 'PYTHONDONTWRITEBYTECODE'):
+        os.environ[key] = environment[key]
+    tempfile.tempdir = environment['TMP']
     window = webview.create_window(
         PRODUCT_NAME, "http://127.0.0.1:5173" if args.dev else str(page),
         js_api=DesktopBridge(host), width=1380, height=900, min_size=(960, 660),

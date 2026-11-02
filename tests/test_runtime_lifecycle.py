@@ -17,7 +17,7 @@ class RuntimeLifecycleTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(dir=ROOT)
         self.root = Path(self.temporary.name)
-        self.manifest = json.loads((ROOT / 'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+        self.manifest = json.loads((ROOT / 'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
         self.host = Host(plugins_dir=self.root / 'plugins', data_dir=self.root / 'data')
 
     def tearDown(self):

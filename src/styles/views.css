@@ -210,7 +210,7 @@
 }
 .connection-card:hover {
   border-color: var(--border-strong);
-  box-shadow: 0 8px 25px #243b2c08;
+  box-shadow: var(--shadow-popover);
   transform: translateY(-1px);
 }
 .connection-card-icon {
@@ -667,11 +667,11 @@
 }
 .dialog-window {
   border-radius: var(--radius-dialog);
-  box-shadow: 0 25px 100px #12251c25;
+  box-shadow: var(--shadow-dialog);
   animation: dialog-in 220ms var(--ease) both;
 }
 .dialog-window::backdrop {
-  background: #15251c32;
+  background: var(--scrim);
   backdrop-filter: blur(5px);
 }
 .dialog-window.is-exiting {
@@ -1176,10 +1176,10 @@ main {
   border-bottom: 1px solid var(--border);
 }
 .dialog-window {
-  box-shadow: 0 24px 90px #24302b24;
+  box-shadow: var(--shadow-dialog);
 }
 .dialog-window::backdrop {
-  background: #17171c32;
+  background: var(--scrim);
 }
 .tool-icon {
   display: grid;

@@ -87,7 +87,7 @@ class PluginManager:
                                       "message": self._status_messages.get(plugin_id, '')},
                           "customRuntime": bool(self._preferences["interpreters"].get(plugin_id))})
         return {"tools": tools, "available": self.available_plugins, "issues": self.issues, "hostVersion": __version__, "sdkVersion": SDK_VERSION, "capabilities": sorted(CAPABILITIES),
-                "dataPath": str(self.data_dir), "pluginsPath": str(self._plugin_drop_root), "packaged": bool(getattr(__import__('sys'), 'frozen', False)),
+                "dataPath": str(self.data_dir), "storage": self.storage, "pluginsPath": str(self._plugin_drop_root), "packaged": bool(getattr(__import__('sys'), 'frozen', False)),
                 "windowState": {"maximized": getattr(self, '_maximized', False)}}
 
     def _stop_plugin(self, plugin_id):

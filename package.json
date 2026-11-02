@@ -1,6 +1,6 @@
 {
   "name": "cove-workbench",
-  "version": "0.13.0",
+  "version": "0.13.6",
   "private": true,
   "description": "Schema-driven Python plugin workbench",
   "scripts": {

@@ -77,7 +77,7 @@ class DeveloperApi:
     def _starter_bytes(self):
         from toolbench.host import ROOT
         sdk = ROOT / 'sdk-runtime/toolbench' if (ROOT / 'sdk-runtime/toolbench').is_dir() else ROOT / 'toolbench'
-        example = ROOT / 'docs/templates/starter'
+        example = ROOT / 'docs/templates/plugin-cove-starter'
         files = {p.name: p.read_bytes() for p in example.iterdir() if p.is_file()}
         from toolbench.plugin_framework.bundle import sdk_files
         for source in sdk_files(sdk):
@@ -103,13 +103,13 @@ class DeveloperApi:
                                           for part in p.relative_to(project).parts)})
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
-            for name, content in files.items(): archive.writestr('cove-plugin-starter/' + name, content)
+            for name, content in files.items(): archive.writestr('plugin-cove-starter/' + name, content)
         return buffer.getvalue()
 
     def export_plugin_starter(self):
         try:
             import webview
-            chosen = self._window.create_file_dialog(webview.FileDialog.SAVE, save_filename='cove-plugin-starter.zip', file_types=ZIP_FILTERS)
+            chosen = self._window.create_file_dialog(webview.FileDialog.SAVE, save_filename='plugin-cove-starter.zip', file_types=ZIP_FILTERS)
             if not chosen: return {'ok': True, 'result': None}
             destination = Path(chosen[0])
             if destination.suffix.lower() != '.zip': destination = Path(str(destination) + '.zip')

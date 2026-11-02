@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, FolderOpen, LoaderCircle, Minus, X } from 'lucide-react';
+import { FolderOpen, LoaderCircle, Minus, X } from 'lucide-react';
 import { languages, setLocale, t, type Locale } from '../core/i18n';
 import { useLocale } from '../core/useLocale';
 import mark from '../../assets/cove-mark.svg';
@@ -81,9 +81,9 @@ export default function SetupApp() {
   const cancelRef = useRef<HTMLButtonElement>(null);
   const primaryRef = useRef<HTMLButtonElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const steps = [t('语言'), t('安装位置'), t('开源许可'), t('安装进度'), t('安装完成')];
   const pages: Page[] = ['language', 'location', 'license', 'installing', 'finish'];
   const index = pages.indexOf(page);
+  const bookend = page === 'language' || page === 'finish';
   useEffect(() => {
     let loaded = false;
     const load = async () => {
@@ -186,7 +186,11 @@ export default function SetupApp() {
     }
   }
   return (
-    <div className={`app-shell setup-shell ${state ? 'setup-ready' : ''}`} data-page={page}>
+    <div
+      className={`app-shell setup-shell ${state ? 'setup-ready' : ''}`}
+      data-page={page}
+      data-version={state?.version}
+    >
       <header
         className="window-titlebar setup-titlebar"
         onPointerDown={(event) => {
@@ -200,9 +204,9 @@ export default function SetupApp() {
           }
         }}
       >
-        <div className="wordmark">
+        <div className="setup-caption">
           <img src={mark} alt="" />
-          <b>Cove Studio</b>
+          <span>{t('Cove Studio {p0} 安装程序', { p0: state?.version || '' })}</span>
         </div>
         <div className="window-drag" />
         <div className="window-controls">
@@ -219,39 +223,31 @@ export default function SetupApp() {
           </button>
         </div>
       </header>
-      <main className="setup-content">
-        <div className="setup-heading">
-          <span data-version={state?.version}>Cove Studio {state?.version}</span>
-          <span>{t('第 {p0} 步，共 {p1} 步', { p0: index + 1, p1: steps.length })}</span>
-        </div>
-        <ol className="setup-steps" aria-label={t('安装步骤')}>
-          {steps.map((label, i) => (
-            <li
-              key={pages[i]}
-              aria-current={i === index ? 'step' : undefined}
-              className={i < index ? 'completed' : ''}
-            >
-              <span>{i < index ? <Check size={12} /> : i + 1}</span>
-              {label}
-            </li>
-          ))}
-        </ol>
-        <h1 ref={headingRef} tabIndex={-1} className="setup-page-title">
-          {page === 'language'
-            ? t('选择安装语言')
-            : page === 'location'
-              ? t('选择安装位置')
-              : page === 'license'
-                ? t('阅读开源许可')
-                : page === 'installing'
-                  ? t('正在安装')
-                  : t('安装完成')}
-        </h1>
-        {page === 'language' && (
-          <>
-            <p className="setup-lead">{t('请选择本次安装使用的语言。')}</p>
-            <section className="setup-card setup-language">
-              <label htmlFor="setup-language">{t('界面语言')}</label>
+      <div className={`setup-body ${bookend ? 'setup-bookend' : ''}`}>
+        {bookend && (
+          <aside className="setup-banner" aria-hidden="true">
+            <img src={mark} alt="" />
+            <strong>Cove Studio</strong>
+          </aside>
+        )}
+        <main className="setup-content" aria-label={t('安装向导')}>
+          <header className="setup-page-heading">
+            <h1 ref={headingRef} tabIndex={-1} className="setup-page-title">
+              {page === 'language'
+                ? t('欢迎安装 Cove Studio')
+                : page === 'location'
+                  ? t('选择安装位置')
+                  : page === 'license'
+                    ? t('许可协议')
+                    : page === 'installing'
+                      ? t('正在安装 Cove Studio')
+                      : t('安装完成')}
+            </h1>
+            {!bookend && <img src={mark} alt="" />}
+          </header>
+          {page === 'language' && (
+            <div className="setup-language setup-form">
+              <label htmlFor="setup-language">{t('安装语言')}</label>
               <select
                 id="setup-language"
                 value={locale}
@@ -272,13 +268,10 @@ export default function SetupApp() {
                   </option>
                 ))}
               </select>
-            </section>
-          </>
-        )}
-        {page === 'location' && (
-          <>
-            <p className="setup-lead">{t('选择 Cove Studio 的安装文件夹。')}</p>
-            <section className="setup-card">
+            </div>
+          )}
+          {page === 'location' && (
+            <div className="setup-form">
               <label htmlFor="setup-directory">{t('安装位置')}</label>
               <div className="setup-location">
                 <input
@@ -295,111 +288,111 @@ export default function SetupApp() {
                     if (folder) setDirectory(folder);
                   }}
                 >
-                  <FolderOpen size={16} />
+                  <FolderOpen size={14} />
+                  {t('浏览…')}
                 </button>
               </div>
-              <p>{t('已有设置、插件和连接配置会保留。')}</p>
-            </section>
-          </>
-        )}
-        {page === 'license' && (
-          <>
-            <p className="setup-lead">{t('继续安装前，请阅读并接受以下开源许可。')}</p>
-            <pre className="setup-license-text" tabIndex={0} aria-label={t('开源许可')}>
-              {state?.license}
-            </pre>
-            <label className="setup-check">
-              <input
-                type="checkbox"
-                checked={accepted}
-                onChange={(event) => setAccepted(event.target.checked)}
-              />
-              {t('我已阅读并同意开源许可。')}
-            </label>
-          </>
-        )}
-        {page === 'installing' && (
-          <div className="setup-installation" role="status">
-            <LoaderCircle className="spin" size={25} />
-            <b>{progressText(progress.phase)}</b>
-            <div
-              className={`setup-progress-track ${progress.percent == null ? 'indeterminate' : ''}`}
-              role="progressbar"
-              aria-label={t('安装进度')}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={progress.percent ?? undefined}
-            >
-              <span style={{ width: progress.percent == null ? '28%' : `${progress.percent}%` }} />
+              <dl className="setup-data-location">
+                <dt>{t('应用数据')}</dt>
+                <dd className="setup-data-path">
+                  <code>{directory.replace(/[\\/]+$/, '') + '\\data'}</code>
+                </dd>
+              </dl>
             </div>
-            <div className="setup-progress-detail">
-              <span>
-                {progress.totalFiles
-                  ? t('已复制 {p0} / {p1} 个文件', {
-                      p0: progress.completedFiles || 0,
-                      p1: progress.totalFiles,
-                    })
-                  : t('请保持安装器打开')}
-              </span>
-              <span>{progress.percent != null ? `${progress.percent}%` : t('处理中…')}</span>
+          )}
+          {page === 'license' && (
+            <div className="setup-license-body">
+              <pre className="setup-license-text" tabIndex={0} aria-label={t('开源许可')}>
+                {state?.license}
+              </pre>
+              <label className="setup-check">
+                <input
+                  type="checkbox"
+                  checked={accepted}
+                  onChange={(event) => setAccepted(event.target.checked)}
+                />
+                {t('我已阅读并同意开源许可。')}
+              </label>
             </div>
-          </div>
-        )}
-        {page === 'finish' && (
-          <div className="setup-complete">
-            <span className="setup-checkmark">
-              <Check size={24} />
-            </span>
-            <p>{t('Cove Studio {p0} 已安装。', { p0: state?.version || '' })}</p>
-            <code className="setup-installed-path">{directory}</code>
-            <label className="setup-check">
-              <input
-                type="checkbox"
-                disabled={starting}
-                checked={launch}
-                onChange={(event) => setLaunch(event.target.checked)}
-              />
-              {t('打开 Cove Studio')}
-            </label>
-            <label className="setup-check">
-              <input
-                type="checkbox"
-                disabled={starting}
-                checked={desktop}
-                onChange={(event) => setDesktop(event.target.checked)}
-              />
-              {t('创建桌面快捷方式')}
-            </label>
-          </div>
-        )}
-        {error && (
-          <p className="setup-error" role="alert">
-            {errorText(error)}
-          </p>
-        )}
-      </main>
+          )}
+          {page === 'installing' && (
+            <div className="setup-installation" role="status">
+              <div className="setup-progress-heading">
+                <span>
+                  <LoaderCircle className="spin" size={15} />
+                  {progressText(progress.phase)}
+                </span>
+                <b>{progress.percent != null ? `${progress.percent}%` : ''}</b>
+              </div>
+              <div
+                className={`setup-progress-track ${progress.percent == null ? 'indeterminate' : ''}`}
+                role="progressbar"
+                aria-label={t('安装进度')}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={progress.percent ?? undefined}
+              >
+                <span
+                  style={{ width: progress.percent == null ? '28%' : `${progress.percent}%` }}
+                />
+              </div>
+              {Boolean(progress.totalFiles) && (
+                <p className="setup-progress-detail">
+                  {t('已复制 {p0} / {p1} 个文件', {
+                    p0: progress.completedFiles || 0,
+                    p1: progress.totalFiles || 0,
+                  })}
+                </p>
+              )}
+              <div className="setup-destination">
+                <span>{t('安装位置')}</span>
+                <code className="setup-installed-path">{directory}</code>
+              </div>
+            </div>
+          )}
+          {page === 'finish' && (
+            <div className="setup-complete">
+              <div className="setup-finish-options">
+                <label className="setup-check">
+                  <input
+                    type="checkbox"
+                    disabled={starting}
+                    checked={launch}
+                    onChange={(event) => setLaunch(event.target.checked)}
+                  />
+                  {t('打开 Cove Studio')}
+                </label>
+                <label className="setup-check">
+                  <input
+                    type="checkbox"
+                    disabled={starting}
+                    checked={desktop}
+                    onChange={(event) => setDesktop(event.target.checked)}
+                  />
+                  {t('创建桌面快捷方式')}
+                </label>
+              </div>
+            </div>
+          )}
+          {error && (
+            <p className="setup-error" role="alert">
+              {errorText(error)}
+            </p>
+          )}
+        </main>
+      </div>
       <footer className="setup-footer">
-        <span>{busy ? t('请保持安装器打开') : t('仅为当前用户安装')}</span>
         <div>
-          {index > 0 && index < 3 && (
+          {index > 0 && page !== 'finish' && (
             <button
               className="button"
+              disabled={busy || page === 'installing'}
               onClick={() => {
                 setError('');
                 setPage(pages[index - 1]);
               }}
             >
-              <ArrowLeft size={14} />
               {t('上一步')}
-            </button>
-          )}
-          {page !== 'finish' && (
-            <button
-              className="button"
-              disabled={busy}
-              onClick={() => void api()?.window_action('close')}
-            >
-              {t('取消')}
             </button>
           )}
           <button
@@ -422,8 +415,16 @@ export default function SetupApp() {
                 : page === 'installing'
                   ? t('正在安装')
                   : t('下一步')}
-            {!busy && page !== 'finish' && <ArrowRight size={14} />}
           </button>
+          {page !== 'finish' && (
+            <button
+              className="button setup-cancel"
+              disabled={busy}
+              onClick={() => void api()?.window_action('close')}
+            >
+              {t('取消')}
+            </button>
+          )}
         </div>
       </footer>
       {closing && (

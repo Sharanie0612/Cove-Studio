@@ -25,7 +25,7 @@ class PluginDoctorTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory(prefix='doctor-test-', dir=ROOT / 'artifacts')
         self.root = Path(self.temporary.name)
         self.project = self.root / 'plugin'
-        shutil.copytree(ROOT / 'docs/templates/starter', self.project)
+        shutil.copytree(ROOT / 'docs/templates/plugin-cove-starter', self.project)
         self.executed = self.root / 'plugin-was-executed'
         (self.project / 'plugin.py').write_text(
             f'from pathlib import Path\nPath({str(self.executed)!r}).write_text("executed")\n'
@@ -160,7 +160,7 @@ class PluginDoctorTests(unittest.TestCase):
     def test_exported_starter_doctor_runs_without_site_packages(self):
         with zipfile.ZipFile(io.BytesIO(DeveloperApi()._starter_bytes())) as archive:
             archive.extractall(self.root / 'download')
-        project = self.root / 'download/cove-plugin-starter'
+        project = self.root / 'download/plugin-cove-starter'
         (project / 'plugin.py').write_bytes((self.project / 'plugin.py').read_bytes())
         result = subprocess.run([sys.executable, '-I', '-S', '-B', str(project / 'doctor.py')],
                                 cwd=project, capture_output=True, encoding='utf-8', timeout=20)

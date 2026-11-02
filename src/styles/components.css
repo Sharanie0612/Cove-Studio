@@ -52,7 +52,7 @@
   height: 21px;
   border-radius: 12px;
   padding: 3px;
-  background: #cbd1da;
+  background: var(--border-strong);
   margin-right: 5px;
 }
 .toggle span {
@@ -68,6 +68,7 @@
   background: var(--blue);
 }
 .toggle.on span {
+  background: var(--on-accent);
   transform: translateX(13px);
 }
 summary {

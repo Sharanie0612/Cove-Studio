@@ -22,7 +22,7 @@ class InstallTransactionsTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(dir=ROOT / 'artifacts')
         self.root = Path(self.temp.name)
         self.host = Host(data_dir=self.root / 'data')
-        self.manifest = json.loads((ROOT / 'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+        self.manifest = json.loads((ROOT / 'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
         self.identity = self.manifest['id']
 
     def tearDown(self):
@@ -34,7 +34,7 @@ class InstallTransactionsTests(unittest.TestCase):
         archive = self.root / 'tool.cove-plugin'
         with zipfile.ZipFile(archive, 'w') as package:
             package.writestr('manifest.json', json.dumps(self.manifest))
-            package.write(ROOT / 'docs/templates/starter/plugin.py', 'plugin.py')
+            package.write(ROOT / 'docs/templates/plugin-cove-starter/plugin.py', 'plugin.py')
         ticket = self.host._inspect_package(archive)['ticket']
         return self.host.install_plugin(ticket)
 

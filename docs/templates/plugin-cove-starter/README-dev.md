@@ -4,6 +4,8 @@
 
 下载示例，先让它运行起来。
 
+源码仓库和工程目录统一命名为 `plugin-cove-xxx`，例如 `plugin-cove-text-helper`。后缀使用小写字母、数字和单个短横线。下载的根工程为 `plugin-cove-starter`，可按实际用途改名；保留 `plugin.py` 入口，已有插件的 `manifest.json` ID 不随目录改名。
+
 先安装 Python 3.11 或更新版本。点击右上角“下载示例”，解压到一个独立文件夹，在该文件夹打开终端。开发表单插件不需要安装 Node.js 或编写前端。
 
 ```

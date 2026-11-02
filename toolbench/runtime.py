@@ -40,7 +40,8 @@ class Worker:
         self.last_used = time.monotonic()
         interpreter_choice = select_interpreter(folder, interpreter)
         sdk_path = ROOT / "sdk-runtime" if getattr(sys, "frozen", False) else ROOT
-        env = dict(os.environ, PYTHONPATH=str(sdk_path), PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1")
+        from toolbench.plugin_framework.environment import worker_environment
+        env = worker_environment(data_dir, dict(os.environ, PYTHONPATH=str(sdk_path), PYTHONIOENCODING="utf-8", PYTHONUNBUFFERED="1"))
         if interpreter_choice.frozen_worker:
             command = [str(interpreter_choice.executable), "--worker", str(folder), str(data_dir)]
         else:

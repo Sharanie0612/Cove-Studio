@@ -76,6 +76,20 @@ export default function SettingsDialog({
           <div>
             <b>{t('数据保存在本机')}</b>
             <p className="data-path">{catalog.dataPath || t('桌面版中显示实际位置')}</p>
+            {catalog.storage?.mode === 'legacy-pending' && (
+              <p className="data-path">
+                {t('旧数据尚未迁移。关闭旧版 Cove 后重新启动重试，目标位置为 {p0}。', {
+                  p0: catalog.storage.preferredPath || '',
+                })}
+              </p>
+            )}
+            {catalog.storage?.legacyBackup && (
+              <p className="data-path">
+                {t('旧数据已复制到新位置，原目录 {p0} 暂时保留为备份。', {
+                  p0: catalog.storage.legacyBackup,
+                })}
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ from toolbench.packages import build_package
 
 class ResultContractTests(unittest.TestCase):
     def setUp(self):
-        self.source = ROOT / 'docs/examples/result-starter'
+        self.source = ROOT / 'docs/examples/plugin-cove-result'
         self.manifest = json.loads((self.source / 'manifest.json').read_text(encoding='utf-8'))
         self.schema = Draft202012Validator(json.loads((ROOT / 'schemas/plugin-manifest.schema.json').read_text(encoding='utf-8')))
 

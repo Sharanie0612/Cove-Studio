@@ -26,13 +26,19 @@ export const traditional = (): GuideChapter[] => [
       {
         kind: 'p',
         text: t(
+          '插件源码仓库和工程目录统一命名为 plugin-cove-xxx，例如 plugin-cove-text-helper。后缀使用小写字母、数字和单个短横线。manifest.json 的 id 保持稳定，plugin.py 继续作为入口。',
+        ),
+      },
+      {
+        kind: 'p',
+        text: t(
           '最后一条命令应输出 {"message": "你好，Cove！"}。dev.py 会读取清单并调用同一个 Tool 类，不需要先安装插件。若提示找不到 Python，请先完成 Python 安装并重新打开终端。',
         ),
       },
       {
         kind: 'p',
         text: t(
-          '项目已经包含 manifest.json、plugin.py、dev.py 和 package.py。sdk 文件夹是开发运行时，打包时会排除。examples/result-starter 演示统一统计卡片和表格，examples/job-starter 演示进度和取消；每个目录自带 SDK，可以独立复制运行。你的业务代码放在 plugin.py，资源放在项目内部。',
+          '项目已经包含 manifest.json、plugin.py、dev.py 和 package.py。sdk 文件夹是开发运行时，打包时会排除。examples/plugin-cove-result 演示统一统计卡片和表格，examples/plugin-cove-job 演示进度和取消；每个目录自带 SDK，可以独立复制运行。你的业务代码放在 plugin.py，资源放在项目内部。',
         ),
       },
     ],

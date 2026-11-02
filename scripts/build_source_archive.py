@@ -6,7 +6,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDERS = ('.github', 'assets', 'docs', 'packaging', 'schemas', 'scripts', 'src', 'tests', 'toolbench',
-           'plugins/projects/mcp')
+           'plugins/projects/plugin-cove-mcp')
 FILES = ('AGENTS.md', '.gitignore', '.gitattributes', '.prettierrc.json', 'run.bat', 'LICENSE', 'THIRD-PARTY-NOTICES.md', 'README.md', 'README.zh-CN.md',
          'CONTRIBUTING.md', 'SECURITY.md', 'package.json', 'package-lock.json', 'pyproject.toml',
          'requirements.txt', 'requirements-dev.txt', 'requirements-build.lock', 'index.html',

@@ -24,9 +24,10 @@ class ConnectionPaused(ValueError):
 
 
 class Gateway:
-    def __init__(self, broker, data_dir, client_allowed=None):
+    def __init__(self, broker, data_dir, client_allowed=None, compatibility_dirs=()):
         self.token = secrets.token_urlsafe(32)
         self.path = data_dir / 'mcp-bridge.json'
+        self.paths = [self.path, *(Path(folder) / 'mcp-bridge.json' for folder in compatibility_dirs)]
         self.broker = broker
         self.client_allowed = client_allowed or (lambda client: True)
         self.client_sessions = {}
@@ -99,7 +100,8 @@ class Gateway:
         self.server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
         self.server.daemon_threads = True
         try:
-            atomic_json(self.path, {'url': f'http://127.0.0.1:{self.server.server_port}/tools', 'token': self.token}, private=True)
+            for path in self.paths:
+                atomic_json(path, {'url': f'http://127.0.0.1:{self.server.server_port}/tools', 'token': self.token}, private=True)
             # Finish initial publication before accepting requests: the caller
             # may still own the host lock while constructing this gateway.
             self.publish_tools()
@@ -119,12 +121,18 @@ class Gateway:
         with self.publication_lock:
             tools = self.broker.definitions()
             content = {'tools': tools}
-            try:
-                unchanged = json.loads(path.read_text(encoding='utf-8')) == content
-            except (OSError, ValueError):
-                unchanged = False
-            if not unchanged:
-                atomic_json(path, content)
+            for connection in self.paths:
+                path = connection.with_name('mcp-tools.json')
+                try:
+                    unchanged = json.loads(path.read_text(encoding='utf-8')) == content
+                except (OSError, ValueError):
+                    unchanged = False
+                if not unchanged:
+                    atomic_json(path, content)
+                if connection != self.path:
+                    with self.broker.lock:
+                        selected = sorted(self.broker.allowed)
+                    atomic_json(connection.with_name('ai-tools.json'), {'plugins': selected})
         return tools
 
     def _live_sessions(self):
@@ -207,11 +215,12 @@ class Gateway:
         self.server.shutdown()
         self.server.server_close()
         self.thread.join(timeout=2)
-        try:
-            if json.loads(self.path.read_text(encoding='utf-8')).get('token') == self.token:
-                self.path.unlink()
-        except (FileNotFoundError, ValueError):
-            pass
+        for path in self.paths:
+            try:
+                if json.loads(path.read_text(encoding='utf-8')).get('token') == self.token:
+                    path.unlink()
+            except (FileNotFoundError, ValueError):
+                pass
 
 
 def forward(connection, request, timeout=POLICY.request):

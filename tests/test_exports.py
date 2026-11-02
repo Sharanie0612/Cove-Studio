@@ -19,7 +19,7 @@ class ExportTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.host = Host(plugins_dir=ROOT / "plugins/projects", data_dir=self.root / 'data')
         self.source = self.root / 'project'
-        shutil.copytree(ROOT / 'docs/templates/starter', self.source)
+        shutil.copytree(ROOT / 'docs/templates/plugin-cove-starter', self.source)
 
     def tearDown(self):
         self.host.close(); self.temp.cleanup()
@@ -98,8 +98,15 @@ class ExportTests(unittest.TestCase):
 
     def test_starter_runs_and_packages_without_site_packages(self):
         content = self.host._starter_bytes()
-        with zipfile.ZipFile(io.BytesIO(content)) as archive: archive.extractall(self.root / 'starter')
-        project = self.root / 'starter/cove-plugin-starter'
+        with zipfile.ZipFile(io.BytesIO(content)) as archive:
+            self.assertEqual({name.split('/')[0] for name in archive.namelist()}, {'plugin-cove-starter'})
+            manifests = [name for name in archive.namelist() if name.endswith('/manifest.json')]
+            self.assertEqual(len(manifests), 4)
+            for name in manifests:
+                self.assertRegex(Path(name).parent.name, r'^plugin-cove-[a-z0-9]+(?:-[a-z0-9]+)*$')
+            self.assertEqual(json.loads(archive.read('plugin-cove-starter/manifest.json'))['id'], 'community.hello')
+            archive.extractall(self.root / 'starter')
+        project = self.root / 'starter/plugin-cove-starter'
         dev = subprocess.run([sys.executable, '-S', str(project / 'dev.py')], cwd=project, capture_output=True, text=True, encoding='utf-8')
         self.assertEqual(dev.returncode, 0, dev.stderr)
         self.assertIn('message', json.loads(dev.stdout))
@@ -122,8 +129,8 @@ class ExportTests(unittest.TestCase):
     def test_downloaded_result_example_is_independent_and_excluded_from_hello_package(self):
         with zipfile.ZipFile(io.BytesIO(self.host._starter_bytes())) as archive:
             archive.extractall(self.root / 'download')
-        starter = self.root / 'download/cove-plugin-starter'
-        project = starter / 'examples/result-starter'
+        starter = self.root / 'download/plugin-cove-starter'
+        project = starter / 'examples/plugin-cove-result'
         command = [sys.executable, '-S', str(project / 'dev.py'), 'analyze', 'text=one two one']
         reply = subprocess.run(command, cwd=self.root, capture_output=True, text=True, encoding='utf-8')
         self.assertEqual(reply.returncode, 0, reply.stderr)

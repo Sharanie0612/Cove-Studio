@@ -44,6 +44,10 @@ for (const mode of ['light', 'dark']) {
       await page.screenshot({ path: testInfo.outputPath(`${heading}-${mode}.png`) });
     }
     await page.getByRole('button', { name: '设置', exact: true }).click();
+    await expect(page.getByRole('button', { name: '晨白灰 配色', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     await page.getByRole('button', { name: '完成', exact: true }).focus();
     await expect(page.getByRole('button', { name: '完成', exact: true })).toBeInViewport();
     await page.keyboard.press('Enter');

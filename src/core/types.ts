@@ -108,6 +108,7 @@ export interface Catalog {
   hostVersion: string;
   sdkVersion: number;
   dataPath?: string;
+  storage?: { mode: string; preferredPath?: string; legacyBackup?: string };
   pluginsPath?: string;
   packaged?: boolean;
   windowState?: { maximized: boolean };

@@ -17,18 +17,23 @@ interface Palette extends CustomColors {
   muted: string;
   border: string;
   primary?: string;
+  onPrimary?: string;
+  soft?: string;
+  shadow?: string;
+  brandSurface?: string;
   green: string;
   red: string;
 }
 export const schemes = [
-  { id: 'cove', name: 'Cove', description: '通透白 · 雾蓝点缀' },
+  { id: 'cove', name: '晨白灰', description: '柔白底色 · 黑灰层次' },
   { id: 'vscode', name: 'VS Code', description: '中性底色 · 清晰蓝' },
   { id: 'github', name: 'GitHub', description: '黑白层次 · 经典绿' },
   { id: 'paper', name: '暖纸', description: '奶油白 · 茶褐色' },
 ] as const;
 
-// Cove palettes adapted from VS Code Modern and GitHub's official theme sources.
-// Sources and attribution: docs/appearance.md. These are independent UI presets.
+// VS Code and GitHub are adapted from their official theme sources.
+// Sources and attribution: docs/appearance.md. All are independent UI presets.
+
 const palettes: Record<Exclude<SchemeId, 'custom'>, Record<ResolvedMode, Palette>> = {
   vscode: {
     light: {
@@ -106,26 +111,36 @@ const palettes: Record<Exclude<SchemeId, 'custom'>, Record<ResolvedMode, Palette
   },
   cove: {
     light: {
-      background: '#fafbfc',
+      background: '#fafafa',
       surface: '#ffffff',
-      sidebar: '#f3f5f7',
-      accent: '#536f94',
-      text: '#2c3440',
-      muted: '#697586',
-      border: '#e4e8ed',
-      green: '#32815f',
-      red: '#bb4b5f',
+      sidebar: '#f2f2f2',
+      accent: '#424242',
+      primary: '#282828',
+      onPrimary: '#ffffff',
+      soft: '#ebebeb',
+      brandSurface: '#f0f0f0',
+      shadow: '0 1px 3px #00000006, 0 6px 18px #00000004',
+      text: '#282828',
+      muted: '#696969',
+      border: '#e4e4e4',
+      green: '#437d6c',
+      red: '#b36073',
     },
     dark: {
-      background: '#20242b',
-      surface: '#282d35',
-      sidebar: '#191d23',
-      accent: '#a0b6d3',
-      text: '#eef0f3',
-      muted: '#aab0bb',
-      border: '#383f49',
-      green: '#78c5a1',
-      red: '#ed9cae',
+      background: '#1c1c1c',
+      surface: '#242424',
+      sidebar: '#161616',
+      accent: '#dedede',
+      primary: '#e5e5e5',
+      onPrimary: '#242424',
+      soft: '#303030',
+      brandSurface: '#292929',
+      shadow: '0 2px 8px #00000020',
+      text: '#eeeeee',
+      muted: '#ababab',
+      border: '#383838',
+      green: '#92c3b0',
+      red: '#dfa0ac',
     },
   },
 };
@@ -214,7 +229,7 @@ export function getPalette(appearance: Appearance, mode: ResolvedMode): Palette 
 export function themeTokens(appearance: Appearance, mode: ResolvedMode): Record<string, string> {
   const p = getPalette(appearance, mode),
     primary = p.primary || p.accent;
-  const soft = mix(p.background, p.accent, mode === 'dark' ? 0.12 : 0.075);
+  const soft = p.soft || mix(p.background, p.accent, mode === 'dark' ? 0.12 : 0.075);
   const terminal = p.background;
   return {
     bg: p.background,
@@ -232,7 +247,9 @@ export function themeTokens(appearance: Appearance, mode: ResolvedMode): Record<
     'on-accent': onColor(p.accent),
     primary: primary,
     'primary-hover': mix(primary, onColor(primary) === '#ffffff' ? '#000000' : '#ffffff', 0.1),
-    'on-primary': onColor(primary),
+    'on-primary': p.onPrimary || onColor(primary),
+    'brand-surface': p.brandSurface || mix(p.surface, primary, mode === 'dark' ? 0.16 : 0.72),
+    'on-brand-surface': p.text,
     green: p.green,
     red: p.red,
     sidebar: p.sidebar,
@@ -253,7 +270,12 @@ export function themeTokens(appearance: Appearance, mode: ResolvedMode): Record<
     'glyph-shadow-opacity': mode === 'dark' ? '.22' : '.12',
     'nav-active': soft,
     'nav-text': p.text,
-    shadow: mode === 'dark' ? '0 2px 8px #00000018' : '0 2px 6px #304d7610, 0 8px 24px #304d7606',
+    shadow:
+      p.shadow ||
+      (mode === 'dark' ? '0 2px 8px #00000018' : '0 2px 6px #00000010, 0 8px 24px #00000006'),
+    'shadow-dialog': mode === 'dark' ? '0 20px 80px #00000040' : '0 20px 80px #00000020',
+    'shadow-popover': mode === 'dark' ? '0 8px 32px #00000030' : '0 8px 32px #00000012',
+    scrim: mode === 'dark' ? '#00000055' : '#00000024',
     'terminal-bg': terminal,
     'terminal-fg': p.text,
     'terminal-black': mix(terminal, p.text, 0.8),

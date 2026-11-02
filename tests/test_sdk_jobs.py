@@ -17,7 +17,7 @@ from toolbench.manifest import validate_manifest
 from toolbench.sdk import BackgroundJob, CommandError, Context
 
 
-EXAMPLE = ROOT / 'docs/examples/job-starter'
+EXAMPLE = ROOT / 'docs/examples/plugin-cove-job'
 
 
 class JobHelperTests(unittest.TestCase):
@@ -185,9 +185,9 @@ class JobWorkerTests(unittest.TestCase):
 
     def test_downloaded_sdk_runs_job_example_without_site_packages(self):
         with zipfile.ZipFile(io.BytesIO(self.host._starter_bytes())) as archive:
-            self.assertIn('cove-plugin-starter/sdk/toolbench/plugin_framework/jobs.py', archive.namelist())
+            self.assertIn('plugin-cove-starter/sdk/toolbench/plugin_framework/jobs.py', archive.namelist())
             archive.extractall(self.root / 'download')
-        project = self.root / 'download/cove-plugin-starter'
+        project = self.root / 'download/plugin-cove-starter'
         for name in ('plugin.py', 'manifest.json', 'dev.py'):
             shutil.copyfile(EXAMPLE / name, project / name)
         result = subprocess.run([sys.executable, '-S', str(project / 'dev.py')], cwd=project,

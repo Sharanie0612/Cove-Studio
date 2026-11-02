@@ -9,9 +9,9 @@ Unicode true
 !ifndef COVE_DISTDIR
 !define COVE_DISTDIR "..\artifacts\desktop-${COVE_VERSION}\Cove"
 !endif
-Name "Cove Studio Preview"
+Name "Cove Studio"
 Caption "$(CoveText0)"
-BrandingText "Cove Studio ${COVE_VERSION} Preview"
+BrandingText "Cove Studio ${COVE_VERSION}"
 ManifestDPIAware true
 OutFile "..\artifacts\Cove-${COVE_VERSION}-setup.exe"
 InstallDir "$LOCALAPPDATA\Programs\Cove"
@@ -19,7 +19,7 @@ InstallDirRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\CoveP
 RequestExecutionLevel user
 SetCompressor /SOLID lzma
 VIProductVersion "${COVE_VERSION}.0"
-VIAddVersionKey "ProductName" "Cove Studio Preview"
+VIAddVersionKey "ProductName" "Cove Studio"
 VIAddVersionKey "FileDescription" "Cove Studio Desktop Installer"
 VIAddVersionKey "FileVersion" "${COVE_VERSION}"
 VIAddVersionKey "LegalCopyright" "Cove contributors"
@@ -335,7 +335,7 @@ Section "Cove"
   activated:
   !insertmacro SetupProgress "finishing"
   StrCmp $TestMode "1" registry_done
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\CovePreview" "DisplayName" "Cove Studio Preview"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\CovePreview" "DisplayName" "Cove Studio"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\CovePreview" "DisplayVersion" "${COVE_VERSION}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\CovePreview" "UninstallString" '"$INSTDIR\Uninstall.exe"'
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\CovePreview" "InstallLocation" "$INSTDIR"

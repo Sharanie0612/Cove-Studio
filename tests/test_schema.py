@@ -19,7 +19,7 @@ class SchemaTests(unittest.TestCase):
                 validate_manifest(manifest)
 
     def test_invalid_field_reference_is_rejected(self):
-        manifest = json.loads((ROOT / "docs/templates/starter/manifest.json").read_text(encoding="utf-8"))
+        manifest = json.loads((ROOT / "docs/templates/plugin-cove-starter/manifest.json").read_text(encoding="utf-8"))
         manifest["ui"]["fields"][0]["showWhen"] = {"field": "missing", "equals": "x"}
         with self.assertRaises(ValueError):
             validate_manifest(manifest)

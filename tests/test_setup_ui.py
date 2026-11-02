@@ -49,20 +49,29 @@ class SetupUiTests(unittest.TestCase):
             self.assertFalse(bridge._busy)
 
     def test_backend_is_serial_and_successful_only_after_exit(self):
-        bridge=SetupBridge('setup.exe',r'C:\Cove Folder','en-US',True)
-        worker=Mock(); worker.wait.return_value=5
-        with patch('toolbench.setup_ui.preflight',return_value={'ready':True}), patch('toolbench.setup_ui.subprocess.Popen',return_value=worker) as launch:
-            self.assertFalse(bridge.install(r'C:\Cove Folder',True)['ok'])
-            self.assertFalse(bridge._completed)
-            worker.wait.return_value=0
-            self.assertTrue(bridge.install(r'C:\Cove Folder',True)['ok'])
-            self.assertTrue(bridge._completed)
-            self.assertIn('/TESTMODE',launch.call_args.args[0])
-            self.assertTrue(launch.call_args.args[0].endswith('/D=C:\\Cove Folder'))
-            self.assertNotIn('timeout',launch.call_args.kwargs)
-            bridge._lock.acquire()
-            try: self.assertEqual(bridge.install(r'C:\Cove Folder',True)['code'],'BUSY')
-            finally: bridge._lock.release()
-        bridge._window=Mock(); bridge._busy=True
-        bridge.window_action('close'); bridge._window.destroy.assert_not_called()
-        bridge._busy=False; bridge.window_action('close'); bridge._window.destroy.assert_called_once()
+        from toolbench.host import ROOT
+        import os
+        with tempfile.TemporaryDirectory(dir=ROOT/'artifacts') as temporary:
+            target=Path(temporary)/'Cove Folder'
+            bridge=SetupBridge('setup.exe',target,'en-US',True)
+            worker=Mock(); worker.wait.return_value=5
+            original_temp=os.environ.get('TEMP')
+            with patch('toolbench.setup_ui.preflight',return_value={'ready':True}), patch('toolbench.setup_ui.subprocess.Popen',return_value=worker) as launch:
+                self.assertFalse(bridge.install(str(target),True)['ok'])
+                self.assertFalse(bridge._completed)
+                worker.wait.return_value=0
+                self.assertTrue(bridge.install(str(target),True)['ok'])
+                self.assertTrue(bridge._completed)
+                self.assertIn('/TESTMODE',launch.call_args.args[0])
+                self.assertTrue(launch.call_args.args[0].endswith('/D='+str(target)))
+                child_environment=launch.call_args.kwargs['env']
+                self.assertEqual(Path(child_environment['TMP']).parent,target.parent)
+                self.assertEqual(child_environment['TMP'],child_environment['TEMP'])
+                self.assertEqual(os.environ.get('TEMP'),original_temp)
+                self.assertNotIn('timeout',launch.call_args.kwargs)
+                bridge._lock.acquire()
+                try: self.assertEqual(bridge.install(str(target),True)['code'],'BUSY')
+                finally: bridge._lock.release()
+            bridge._window=Mock(); bridge._busy=True
+            bridge.window_action('close'); bridge._window.destroy.assert_not_called()
+            bridge._busy=False; bridge.window_action('close'); bridge._window.destroy.assert_called_once()

@@ -13,9 +13,9 @@ class PluginLocalizationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT/'artifacts') as folder:
             root = Path(folder)
             plugin = root/'plugins/hello'; plugin.mkdir(parents=True)
-            manifest = json.loads((ROOT/'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+            manifest = json.loads((ROOT/'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
             (plugin/'manifest.json').write_text(json.dumps(manifest), encoding='utf-8')
-            (plugin/'plugin.py').write_text((ROOT/'docs/templates/starter/plugin.py').read_text(encoding='utf-8'), encoding='utf-8')
+            (plugin/'plugin.py').write_text((ROOT/'docs/templates/plugin-cove-starter/plugin.py').read_text(encoding='utf-8'), encoding='utf-8')
             original = (plugin/'manifest.json').read_bytes()
             host = Host(plugins_dir=root/'plugins', data_dir=root/'data')
             try:
@@ -36,7 +36,7 @@ class PluginLocalizationTests(unittest.TestCase):
             finally: host.close()
 
     def test_catalog_validation_rejects_invalid_messages_without_execution(self):
-        manifest=json.loads((ROOT/'docs/templates/starter/manifest.json').read_text(encoding='utf-8'))
+        manifest=json.loads((ROOT/'docs/templates/plugin-cove-starter/manifest.json').read_text(encoding='utf-8'))
         validate_manifest(manifest)
         for value in ({'defaultLocale':'fr','messages':{}},
                       {'defaultLocale':'zh-CN','messages':{'en-US':{'{name}':'{other}'}}},
